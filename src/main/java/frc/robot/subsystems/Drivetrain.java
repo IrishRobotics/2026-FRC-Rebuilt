@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -27,7 +28,7 @@ public class Drivetrain extends SubsystemBase {
   public Drivetrain() {}
 
   public void Drive(double x, double y, double turn) {
-    drive.driveCartesian(x, y, turn);
+    drive.driveCartesian(x, y, turn, new Rotation2d());
   }
 
   // public OperatorDrive(XboxController controller) {
