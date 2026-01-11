@@ -12,8 +12,7 @@ import frc.robot.subsystems.Drivetrain;
 public class OperatorDrive extends Command {
   private CommandXboxController controller;
   private Drivetrain drive;
-  
-  
+
   /** Creates a new OperatorDrive. */
   public OperatorDrive(Drivetrain drivetrain, CommandXboxController xController) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -30,7 +29,8 @@ public class OperatorDrive extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    drive.Drive(controller.getLeftY()*-0.35, controller.getLeftX()*0.35, controller.getRightX()*0.35);
+    drive.Drive(
+        controller.getLeftY() * -0.35, controller.getLeftX() * 0.35, controller.getRightX() * 0.35);
   }
 
   // Called once the command ends or is interrupted.

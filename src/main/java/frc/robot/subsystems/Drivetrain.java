@@ -4,26 +4,25 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-
+import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Drivetrain extends SubsystemBase {
-  private SparkMax frontLeftMotor = 
-    new SparkMax(Constants.Drivetrain.frontLeft, MotorType.kBrushless);
+  private SparkMax frontLeftMotor =
+      new SparkMax(Constants.Drivetrain.frontLeft, MotorType.kBrushless);
   private SparkMax frontRightMotor =
-    new SparkMax(Constants.Drivetrain.frontRight, MotorType.kBrushless);
+      new SparkMax(Constants.Drivetrain.frontRight, MotorType.kBrushless);
   private SparkMax backLeftMotor =
-    new SparkMax(Constants.Drivetrain.backLeft, MotorType.kBrushless);
-  private SparkMax backRightMotor = 
-    new SparkMax(Constants.Drivetrain.backRight, MotorType.kBrushless);
+      new SparkMax(Constants.Drivetrain.backLeft, MotorType.kBrushless);
+  private SparkMax backRightMotor =
+      new SparkMax(Constants.Drivetrain.backRight, MotorType.kBrushless);
 
   private MecanumDrive drive =
-    new MecanumDrive(frontLeftMotor, backLeftMotor, frontRightMotor, backRightMotor);
+      new MecanumDrive(frontLeftMotor, backLeftMotor, frontRightMotor, backRightMotor);
 
   public Drivetrain() {}
 
@@ -32,15 +31,15 @@ public class Drivetrain extends SubsystemBase {
   }
 
   // public OperatorDrive(XboxController controller) {
-    
+
   // }
 
   // // public Command OperatorDrive(XboxController controller) {
   // //   return new FunctionalCommand(
-  // //     () -> {}, 
+  // //     () -> {},
   // //     () -> {this.Drive(
   // //       controller.getRightX(),
-  // //       controller.getLeftY(), 
+  // //       controller.getLeftY(),
   // //       controller.getLeftX());},
   // //     (v) -> {}, () -> {return false;},
   // //     this

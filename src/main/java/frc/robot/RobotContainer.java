@@ -12,18 +12,16 @@ import frc.robot.subsystems.Drivetrain;
 
 public class RobotContainer {
   private final Drivetrain drivetrain;
-  
+
   private final CommandXboxController driverController;
-  
+
   public RobotContainer() {
     driverController = new CommandXboxController(Constants.driverControllerPort);
-    
+
     drivetrain = new Drivetrain();
 
-    drivetrain.setDefaultCommand(
-      new OperatorDrive(drivetrain, driverController)
-    );
-    
+    drivetrain.setDefaultCommand(new OperatorDrive(drivetrain, driverController));
+
     configureBindings();
   }
 
