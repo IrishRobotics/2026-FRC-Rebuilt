@@ -8,7 +8,10 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 
 public class Drivetrain extends SubsystemBase {
@@ -26,23 +29,20 @@ public class Drivetrain extends SubsystemBase {
 
   public Drivetrain() {}
 
-  public void Drive(double x, double y, double turn) {
+  public void drive(double x, double y, double turn) {
     drive.driveCartesian(x, y, turn, new Rotation2d());
   }
 
-  // public OperatorDrive(XboxController controller) {
-
-  // }
-
-  // // public Command OperatorDrive(XboxController controller) {
-  // //   return new FunctionalCommand(
-  // //     () -> {},
-  // //     () -> {this.Drive(
-  // //       controller.getRightX(),
-  // //       controller.getLeftY(),
-  // //       controller.getLeftX());},
-  // //     (v) -> {}, () -> {return false;},
-  // //     this
-  // //   );
-  // // }
+  public Command operatorDrive(CommandXboxController controller) {
+    return new FunctionalCommand(
+        () -> {},
+        () -> {
+          this.drive(controller.getRightX(), controller.getLeftY(), controller.getLeftX());
+        },
+        (v) -> {},
+        () -> {
+          return false;
+        },
+        this);
+  }
 }
