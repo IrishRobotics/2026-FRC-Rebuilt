@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 
-public class Drivetrain extends SubsystemBase {
+public class Drivetrain extends SubsystemBase implements AutoCloseable {
   private SparkMax frontLeftMotor =
       new SparkMax(Constants.Drivetrain.frontLeft, MotorType.kBrushless);
   private SparkMax frontRightMotor =
@@ -37,12 +37,25 @@ public class Drivetrain extends SubsystemBase {
     return new FunctionalCommand(
         () -> {},
         () -> {
-          this.drive(controller.getRightX(), controller.getLeftY(), controller.getLeftX());
+          this.drive(controller.getRightX(), controller.getRightY(), controller.getLeftX());
         },
         (v) -> {},
         () -> {
           return false;
         },
         this);
+  }
+
+  public SparkMax[] getMotors() {
+    SparkMax[] motors = {frontLeftMotor, frontRightMotor, backLeftMotor, backRightMotor};
+    return motors;
+  }
+
+  @Override
+  public void close() {
+    frontLeftMotor.close();
+    frontRightMotor.close();
+    backLeftMotor.close();
+    backRightMotor.close();
   }
 }

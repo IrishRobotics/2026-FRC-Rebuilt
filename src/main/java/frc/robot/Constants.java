@@ -14,4 +14,8 @@ public final class Constants {
 
     public static final double speed = 0.75;
   }
+
+  public static class Tests {
+    public static final double DELTA = 1e-2;
+  }
 }
