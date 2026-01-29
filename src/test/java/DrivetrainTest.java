@@ -6,6 +6,7 @@ import com.revrobotics.sim.SparkMaxSim;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.hal.HAL;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
 import org.junit.jupiter.api.AfterEach;
@@ -104,6 +105,7 @@ class DrivetrainTest {
     @Test
     void testDriveSpeed() {
         drivetrain.setSpeed(0.5);
+        assertEquals(drivetrain.getSpeed(), 0.5, Constants.Tests.DELTA);
         drivetrain.drive(1, 0, 0);
         assertEquals(0.5, frontLeftMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
         assertEquals(0.5, frontRightMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
@@ -126,5 +128,38 @@ class DrivetrainTest {
         actualMessage = exception.getMessage();
 
         assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    void testToggleSpeedHighToLow() {
+        drivetrain.setSpeed(Constants.Drivetrain.highSpeed);
+        assertEquals(Constants.Drivetrain.highSpeed, drivetrain.getSpeed(), Constants.Tests.DELTA);
+
+        InstantCommand cmd = (InstantCommand) drivetrain.toggleSpeed();
+        cmd.initialize();
+
+        assertEquals(Constants.Drivetrain.lowSpeed, drivetrain.getSpeed(), Constants.Tests.DELTA);
+    }
+
+    @Test
+    void testToggleSpeedLowToHigh() {
+        drivetrain.setSpeed(Constants.Drivetrain.lowSpeed);
+        assertEquals(Constants.Drivetrain.lowSpeed, drivetrain.getSpeed(), Constants.Tests.DELTA);
+
+        InstantCommand cmd = (InstantCommand) drivetrain.toggleSpeed();
+        cmd.initialize();
+
+        assertEquals(Constants.Drivetrain.highSpeed, drivetrain.getSpeed(), Constants.Tests.DELTA);
+    }
+    
+    @Test
+    void testToggleSpeedUndefinedToHigh() {
+        drivetrain.setSpeed(0);
+        assertEquals(0, drivetrain.getSpeed(), Constants.Tests.DELTA);
+
+        InstantCommand cmd = (InstantCommand) drivetrain.toggleSpeed();
+        cmd.initialize();
+
+        assertEquals(Constants.Drivetrain.highSpeed, drivetrain.getSpeed(), Constants.Tests.DELTA);
     }
 }
