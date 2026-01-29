@@ -5,44 +5,88 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.PersistMode;
+import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkMax;
-import edu.wpi.first.math.geometry.Rotation2d;
+import com.revrobotics.spark.config.SparkMaxConfig;
+
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 
-public class Drivetrain extends SubsystemBase {
-  private SparkMax frontLeftMotor =
-      new SparkMax(Constants.Drivetrain.frontLeft, MotorType.kBrushless);
-  private SparkMax frontRightMotor =
-      new SparkMax(Constants.Drivetrain.frontRight, MotorType.kBrushless);
-  private SparkMax backLeftMotor =
-      new SparkMax(Constants.Drivetrain.backLeft, MotorType.kBrushless);
-  private SparkMax backRightMotor =
-      new SparkMax(Constants.Drivetrain.backRight, MotorType.kBrushless);
+public class Drivetrain extends SubsystemBase implements AutoCloseable {
+  private SparkMax frontLeftMotor = new SparkMax(Constants.Drivetrain.frontLeft, MotorType.kBrushless);
+  private SparkMax frontRightMotor = new SparkMax(Constants.Drivetrain.frontRight, MotorType.kBrushless);
+  private SparkMax backLeftMotor = new SparkMax(Constants.Drivetrain.backLeft, MotorType.kBrushless);
+  private SparkMax backRightMotor = new SparkMax(Constants.Drivetrain.backRight, MotorType.kBrushless);
+  private double speed = Constants.Drivetrain.lowSpeed;
 
-  private MecanumDrive drive =
-      new MecanumDrive(frontLeftMotor, backLeftMotor, frontRightMotor, backRightMotor);
+  private MecanumDrive drive = new MecanumDrive(frontLeftMotor, backLeftMotor, frontRightMotor, backRightMotor);
 
-  public Drivetrain() {}
+  public Drivetrain() {
+    SparkMaxConfig defaultConfig = new SparkMaxConfig();
+    defaultConfig.inverted(false);
+    SparkMaxConfig invertedConfig = new SparkMaxConfig();
+    invertedConfig.inverted(true);
 
-  public void Drive(double x, double y, double turn) {
-    drive.driveCartesian(x, y, turn, new Rotation2d());
+    frontLeftMotor.configure(defaultConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+    frontRightMotor.configure(invertedConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+    backLeftMotor.configure(defaultConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+    backRightMotor.configure(invertedConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
   }
 
-  // public OperatorDrive(XboxController controller) {
+  public void drive(double forward, double strafe, double turn) {
+    drive.driveCartesian(forward * speed, strafe * speed, turn * speed);
+  }
 
-  // }
+  public Command operatorDrive(CommandXboxController controller) {
+    return new RunCommand(
+        () -> {
+          this.drive(controller.getRightY(), controller.getRightX(), controller.getLeftX());
+        },
+        this);
+  }
 
-  // // public Command OperatorDrive(XboxController controller) {
-  // //   return new FunctionalCommand(
-  // //     () -> {},
-  // //     () -> {this.Drive(
-  // //       controller.getRightX(),
-  // //       controller.getLeftY(),
-  // //       controller.getLeftX());},
-  // //     (v) -> {}, () -> {return false;},
-  // //     this
-  // //   );
-  // // }
+  /*
+   * Gets all motors for use by tests and sets the deadband to zero.
+   * 
+   * @returns {fl, fr, bl, br}
+   */
+  public SparkMax[] testMode() {
+    drive.setDeadband(0);
+    SparkMax[] motors = { frontLeftMotor, frontRightMotor, backLeftMotor, backRightMotor };
+    return motors;
+  }
+
+  public void setSpeed(double newSpeed) throws IllegalArgumentException {
+    if (newSpeed > 1 || newSpeed < 0)
+      throw new IllegalArgumentException(String.format("Value %.1f not in range [0.0, 1.0]", newSpeed));
+
+    speed = newSpeed;
+  }
+
+  public double getSpeed() {
+    return speed;
+  }
+
+  public Command toggleSpeed() {
+    return new InstantCommand(() -> {
+      if (speed == Constants.Drivetrain.highSpeed)
+        speed = Constants.Drivetrain.lowSpeed;
+      else
+        speed = Constants.Drivetrain.highSpeed;
+    });
+  }
+
+  @Override
+  public void close() {
+    frontLeftMotor.close();
+    frontRightMotor.close();
+    backLeftMotor.close();
+    backRightMotor.close();
+  }
 }
