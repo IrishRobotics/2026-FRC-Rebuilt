@@ -10,15 +10,17 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.Debug;
 import frc.robot.subsystems.Drivetrain;
 
+/** The main robot controller class */
 public class RobotContainer {
   private final CommandXboxController driverController;
   private final CommandXboxController coopController;
 
   private final Drivetrain drivetrain;
 
+  /** A controller for the robot */
   public RobotContainer() {
-    driverController = new CommandXboxController(Constants.Control.driverControllerPort);
-    coopController = new CommandXboxController(Constants.Control.coopControllerPort);
+    driverController = new CommandXboxController(Constants.Control.DRIVER_CONTROLLER_PORT);
+    coopController = new CommandXboxController(Constants.Control.COOP_CONTROLLER_PORT);
 
     drivetrain = new Drivetrain();
 
@@ -32,6 +34,9 @@ public class RobotContainer {
     coopController.a().whileTrue(Debug.triggered("Coop A"));
   }
 
+  /** Retrieves the selected autonomous command
+   * @return autonomous command
+   */
   public Command getAutonomousCommand() {
     return Commands.print("No autonomous command configured");
   }

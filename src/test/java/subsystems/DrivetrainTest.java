@@ -135,24 +135,24 @@ class DrivetrainTest {
 
   @Test
   void testToggleSpeedHighToLow() {
-    drivetrain.setSpeed(Constants.Drivetrain.highSpeed);
-    assertEquals(Constants.Drivetrain.highSpeed, drivetrain.getSpeed(), Constants.Tests.DELTA);
+    drivetrain.setSpeed(Constants.Drivetrain.HIGH_SPEED);
+    assertEquals(Constants.Drivetrain.HIGH_SPEED, drivetrain.getSpeed(), Constants.Tests.DELTA);
 
     InstantCommand cmd = (InstantCommand) drivetrain.toggleSpeed();
     cmd.initialize();
 
-    assertEquals(Constants.Drivetrain.lowSpeed, drivetrain.getSpeed(), Constants.Tests.DELTA);
+    assertEquals(Constants.Drivetrain.LOW_SPEED, drivetrain.getSpeed(), Constants.Tests.DELTA);
   }
 
   @Test
   void testToggleSpeedLowToHigh() {
-    drivetrain.setSpeed(Constants.Drivetrain.lowSpeed);
-    assertEquals(Constants.Drivetrain.lowSpeed, drivetrain.getSpeed(), Constants.Tests.DELTA);
+    drivetrain.setSpeed(Constants.Drivetrain.LOW_SPEED);
+    assertEquals(Constants.Drivetrain.LOW_SPEED, drivetrain.getSpeed(), Constants.Tests.DELTA);
 
     InstantCommand cmd = (InstantCommand) drivetrain.toggleSpeed();
     cmd.initialize();
 
-    assertEquals(Constants.Drivetrain.highSpeed, drivetrain.getSpeed(), Constants.Tests.DELTA);
+    assertEquals(Constants.Drivetrain.HIGH_SPEED, drivetrain.getSpeed(), Constants.Tests.DELTA);
   }
 
   @Test
@@ -163,6 +163,6 @@ class DrivetrainTest {
     InstantCommand cmd = (InstantCommand) drivetrain.toggleSpeed();
     cmd.initialize();
 
-    assertEquals(Constants.Drivetrain.highSpeed, drivetrain.getSpeed(), Constants.Tests.DELTA);
+    assertEquals(Constants.Drivetrain.HIGH_SPEED, drivetrain.getSpeed(), Constants.Tests.DELTA);
   }
 }
