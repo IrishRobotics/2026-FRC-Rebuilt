@@ -10,7 +10,9 @@ import edu.wpi.first.wpilibj.RobotBase;
 public final class Main {
   private Main() {}
 
-  /** Starts the robot
+  /**
+   * Starts the robot
+   *
    * @param args should be empty
    */
   public static void main(String... args) {

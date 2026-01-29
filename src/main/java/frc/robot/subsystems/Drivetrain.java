@@ -49,7 +49,9 @@ public class Drivetrain extends SubsystemBase implements AutoCloseable {
         invertedConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
   }
 
-  /** Sets the motor speeds using a robot centric drive style
+  /**
+   * Sets the motor speeds using a robot centric drive style
+   *
    * @param forward the component along the forward axis of the robot
    * @param strafe the component perpendicular to the forward component
    * @param turn the turn component of the movement
@@ -58,7 +60,9 @@ public class Drivetrain extends SubsystemBase implements AutoCloseable {
     drive.driveCartesian(forward * speed, strafe * speed, turn * speed);
   }
 
-  /** A command factory for driving controlled by a controller
+  /**
+   * A command factory for driving controlled by a controller
+   *
    * @param controller the controller movement will be pulled from
    * @return a command that moves according to controller input
    */
@@ -70,7 +74,9 @@ public class Drivetrain extends SubsystemBase implements AutoCloseable {
         this);
   }
 
-  /** Gets all motors for use by tests and sets the deadband to zero.
+  /**
+   * Gets all motors for use by tests and sets the deadband to zero.
+   *
    * @return {fl, fr, bl, br}
    */
   public SparkMax[] testMode() {
@@ -79,7 +85,9 @@ public class Drivetrain extends SubsystemBase implements AutoCloseable {
     return motors;
   }
 
-  /** Sets the max speed of the robot
+  /**
+   * Sets the max speed of the robot
+   *
    * @param newSpeed [0,1]
    */
   public void setSpeed(double newSpeed) throws IllegalArgumentException {
@@ -90,14 +98,18 @@ public class Drivetrain extends SubsystemBase implements AutoCloseable {
     speed = newSpeed;
   }
 
-  /** Returns the current robot speed
+  /**
+   * Returns the current robot speed
+   *
    * @return current speed
    */
   public double getSpeed() {
     return speed;
   }
 
-  /** Creates an instantaneous command to switch between high and low speed
+  /**
+   * Creates an instantaneous command to switch between high and low speed
+   *
    * @return a command to toggle the speed
    */
   public Command toggleSpeed() {

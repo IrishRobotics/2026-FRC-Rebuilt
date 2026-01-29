@@ -34,7 +34,9 @@ public class RobotContainer {
     coopController.a().whileTrue(Debug.triggered("Coop A"));
   }
 
-  /** Retrieves the selected autonomous command
+  /**
+   * Retrieves the selected autonomous command
+   *
    * @return autonomous command
    */
   public Command getAutonomousCommand() {
