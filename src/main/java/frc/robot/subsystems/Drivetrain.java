@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
@@ -44,15 +45,10 @@ public class Drivetrain extends SubsystemBase implements AutoCloseable {
   }
 
   public Command operatorDrive(CommandXboxController controller) {
-    return new FunctionalCommand(
-        () -> {
-        },
+    return new RunCommand(
         () -> {
           this.drive(controller.getRightY(), controller.getRightX(), controller.getLeftX());
         },
-        (v) -> {
-        },
-        () -> false,
         this);
   }
 
