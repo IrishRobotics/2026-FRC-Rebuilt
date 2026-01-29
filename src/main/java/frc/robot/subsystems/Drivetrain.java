@@ -5,7 +5,12 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.PersistMode;
+import com.revrobotics.ResetMode;
+import com.revrobotics.config.BaseConfig;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkMaxConfig;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -27,7 +32,17 @@ public class Drivetrain extends SubsystemBase implements AutoCloseable {
   private MecanumDrive drive =
       new MecanumDrive(frontLeftMotor, backLeftMotor, frontRightMotor, backRightMotor);
 
-  public Drivetrain() {}
+  public Drivetrain() {
+    SparkMaxConfig defaultConfig = new SparkMaxConfig();
+    defaultConfig.inverted(false);
+    SparkMaxConfig invertedConfig = new SparkMaxConfig();
+    invertedConfig.inverted(true);
+
+    frontLeftMotor.configure(defaultConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+    backLeftMotor.configure(defaultConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+    frontRightMotor.configure(invertedConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+    backRightMotor.configure(invertedConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+  }
 
   public void drive(double x, double y, double turn) {
     drive.driveCartesian(x, y, turn, new Rotation2d());
