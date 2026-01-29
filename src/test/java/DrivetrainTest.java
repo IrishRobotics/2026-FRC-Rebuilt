@@ -1,4 +1,6 @@
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.revrobotics.sim.SparkMaxSim;
 import com.revrobotics.spark.SparkMax;
@@ -21,8 +23,9 @@ class DrivetrainTest {
     void setup() {
         assert HAL.initialize(500, 0);
         drivetrain = new Drivetrain();
+        drivetrain.setSpeed(1);
 
-        final SparkMax[] motors = drivetrain.getMotors();
+        final SparkMax[] motors = drivetrain.testMode();
         frontLeftMotorSimulation = new SparkMaxSim(motors[0], DCMotor.getNEO(1));
         frontRightMotorSimulation = new SparkMaxSim(motors[1], DCMotor.getNEO(1));
         backLeftMotorSimulation = new SparkMaxSim(motors[2], DCMotor.getNEO(1));
@@ -96,5 +99,32 @@ class DrivetrainTest {
         assertEquals(0.0, frontRightMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
         assertEquals(0.0, backLeftMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
         assertEquals(1.0, backRightMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
+    }
+
+    @Test
+    void testDriveSpeed() {
+        drivetrain.setSpeed(0.5);
+        drivetrain.drive(1, 0, 0);
+        assertEquals(0.5, frontLeftMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
+        assertEquals(0.5, frontRightMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
+        assertEquals(0.5, backLeftMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
+        assertEquals(0.5, backRightMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
+    }
+
+    @Test
+    void testDriveSpeedException() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> drivetrain.setSpeed(1.5));
+
+        String expectedMessage = "Value 1.5 not in range [0.0, 1.0]";
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
+
+        exception = assertThrows(IllegalArgumentException.class, () -> drivetrain.setSpeed(-5.00001));
+
+        expectedMessage = "Value -5.0 not in range [0.0, 1.0]";
+        actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
     }
 }

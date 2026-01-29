@@ -12,7 +12,8 @@ public final class Constants {
     public static final int backLeft = 3;
     public static final int backRight = 4;
 
-    public static final double speed = 0.75;
+    public static final double highSpeed = 0.75;
+    public static final double lowSpeed = 0.5;
   }
 
   public static class Tests {
