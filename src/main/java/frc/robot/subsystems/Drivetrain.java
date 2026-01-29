@@ -17,20 +17,22 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 
+/** This class controls the robot's Mecanum drivebase */
 public class Drivetrain extends SubsystemBase implements AutoCloseable {
   private SparkMax frontLeftMotor =
-      new SparkMax(Constants.Drivetrain.frontLeft, MotorType.kBrushless);
+      new SparkMax(Constants.Drivetrain.FRONT_LEFT_MOTOR, MotorType.kBrushless);
   private SparkMax frontRightMotor =
-      new SparkMax(Constants.Drivetrain.frontRight, MotorType.kBrushless);
+      new SparkMax(Constants.Drivetrain.FRONT_RIGHT_MOTOR, MotorType.kBrushless);
   private SparkMax backLeftMotor =
-      new SparkMax(Constants.Drivetrain.backLeft, MotorType.kBrushless);
+      new SparkMax(Constants.Drivetrain.BACK_LEFT_MOTOR, MotorType.kBrushless);
   private SparkMax backRightMotor =
-      new SparkMax(Constants.Drivetrain.backRight, MotorType.kBrushless);
-  private double speed = Constants.Drivetrain.lowSpeed;
+      new SparkMax(Constants.Drivetrain.BACK_RIGHT_MOTOR, MotorType.kBrushless);
+  private double speed = Constants.Drivetrain.LOW_SPEED;
 
   private MecanumDrive drive =
       new MecanumDrive(frontLeftMotor, backLeftMotor, frontRightMotor, backRightMotor);
 
+  /** Creates a new {@code Drivetrain} using the constants in {@code Constants} */
   public Drivetrain() {
     SparkMaxConfig defaultConfig = new SparkMaxConfig();
     defaultConfig.inverted(false);
@@ -47,10 +49,19 @@ public class Drivetrain extends SubsystemBase implements AutoCloseable {
         invertedConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
   }
 
+  /** Sets the motor speeds using a robot centric drive style
+   * @param forward the component along the forward axis of the robot
+   * @param strafe the component perpendicular to the forward component
+   * @param turn the turn component of the movement
+   */
   public void drive(double forward, double strafe, double turn) {
     drive.driveCartesian(forward * speed, strafe * speed, turn * speed);
   }
 
+  /** A command factory for driving controlled by a controller
+   * @param controller the controller movement will be pulled from
+   * @return a command that moves according to controller input
+   */
   public Command operatorDrive(CommandXboxController controller) {
     return new RunCommand(
         () -> {
@@ -59,10 +70,8 @@ public class Drivetrain extends SubsystemBase implements AutoCloseable {
         this);
   }
 
-  /*
-   * Gets all motors for use by tests and sets the deadband to zero.
-   *
-   * @returns {fl, fr, bl, br}
+  /** Gets all motors for use by tests and sets the deadband to zero.
+   * @return {fl, fr, bl, br}
    */
   public SparkMax[] testMode() {
     drive.setDeadband(0);
@@ -70,6 +79,9 @@ public class Drivetrain extends SubsystemBase implements AutoCloseable {
     return motors;
   }
 
+  /** Sets the max speed of the robot
+   * @param newSpeed [0,1]
+   */
   public void setSpeed(double newSpeed) throws IllegalArgumentException {
     if (newSpeed > 1 || newSpeed < 0)
       throw new IllegalArgumentException(
@@ -78,15 +90,21 @@ public class Drivetrain extends SubsystemBase implements AutoCloseable {
     speed = newSpeed;
   }
 
+  /** Returns the current robot speed
+   * @return current speed
+   */
   public double getSpeed() {
     return speed;
   }
 
+  /** Creates an instantaneous command to switch between high and low speed
+   * @return a command to toggle the speed
+   */
   public Command toggleSpeed() {
     return new InstantCommand(
         () -> {
-          if (speed == Constants.Drivetrain.highSpeed) speed = Constants.Drivetrain.lowSpeed;
-          else speed = Constants.Drivetrain.highSpeed;
+          if (speed == Constants.Drivetrain.HIGH_SPEED) setSpeed(Constants.Drivetrain.LOW_SPEED);
+          else setSpeed(Constants.Drivetrain.HIGH_SPEED);
         });
   }
 

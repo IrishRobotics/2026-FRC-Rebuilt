@@ -6,9 +6,13 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.RobotBase;
 
+/** The main class for 2606's robot */
 public final class Main {
   private Main() {}
 
+  /** Starts the robot
+   * @param args should be empty
+   */
   public static void main(String... args) {
     RobotBase.startRobot(Robot::new);
   }
