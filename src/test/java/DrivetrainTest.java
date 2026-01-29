@@ -52,4 +52,49 @@ class DrivetrainTest {
         assertEquals(1.0, backLeftMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
         assertEquals(1.0, backRightMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
     }
+
+    @Test
+    void testDriveBackward() {
+        drivetrain.drive(-1, 0, 0);
+        assertEquals(-1.0, frontLeftMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
+        assertEquals(-1.0, frontRightMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
+        assertEquals(-1.0, backLeftMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
+        assertEquals(-1.0, backRightMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
+    }
+
+    @Test
+    void testDriveLeft() {
+        drivetrain.drive(0, -1, 0);
+        assertEquals(-1.0, frontLeftMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
+        assertEquals(1.0, frontRightMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
+        assertEquals(1.0, backLeftMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
+        assertEquals(-1.0, backRightMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
+    }
+
+    @Test
+    void testDriveRight() {
+        drivetrain.drive(0, 1, 0);
+        assertEquals(1.0, frontLeftMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
+        assertEquals(-1.0, frontRightMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
+        assertEquals(-1.0, backLeftMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
+        assertEquals(1.0, backRightMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
+    }
+
+    @Test
+    void testTurnRight() {
+        drivetrain.drive(0, 0, 1);
+        assertEquals(1.0, frontLeftMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
+        assertEquals(-1.0, frontRightMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
+        assertEquals(1.0, backLeftMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
+        assertEquals(-1.0, backRightMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
+    }
+
+    @Test
+    void testDriveForwardRight() {
+        drivetrain.drive(1, 1, 0);
+        assertEquals(1.0, frontLeftMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
+        assertEquals(0.0, frontRightMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
+        assertEquals(0.0, backLeftMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
+        assertEquals(1.0, backRightMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
+    }
 }
