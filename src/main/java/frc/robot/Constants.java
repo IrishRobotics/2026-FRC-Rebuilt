@@ -2,6 +2,7 @@ package frc.robot;
 
 public final class Constants {
   private Constants() {}
+
   public static class Control {
     private Control() {}
 
@@ -23,6 +24,7 @@ public final class Constants {
 
   public static class Tests {
     private Tests() {}
+
     public static final double DELTA = 1e-2;
   }
 }
