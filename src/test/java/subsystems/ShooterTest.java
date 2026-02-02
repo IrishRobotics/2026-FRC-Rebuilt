@@ -18,7 +18,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class ShooterTest {
+class ShooterTest {
   private Shooter shooter;
   private SparkMaxSim topMotor;
   private SparkMaxSim bottomMotor;
@@ -34,8 +34,8 @@ public class ShooterTest {
       final Field bottomMotorField = shooter.getClass().getDeclaredField("bottomMotor");
       bottomMotorField.setAccessible(true);
 
-      topMotor = new SparkMaxSim((SparkMax) topMotorField.get(shooter), DCMotor.getNEO(0));
-      bottomMotor = new SparkMaxSim((SparkMax) bottomMotorField.get(shooter), DCMotor.getNEO(0));
+      topMotor = new SparkMaxSim((SparkMax) topMotorField.get(shooter), DCMotor.getNEO(1));
+      bottomMotor = new SparkMaxSim((SparkMax) bottomMotorField.get(shooter), DCMotor.getNEO(1));
     } catch (NoSuchFieldException | IllegalAccessException e) {
       e.printStackTrace();
       fail("Failed to access motor fields via reflection");
@@ -81,7 +81,7 @@ public class ShooterTest {
   }
 
   @Test
-  void setBothSetpoints() {
+  void testSetBothSetpoints() {
     final double speed = 10;
     shooter.setSpeed(speed);
     assertEquals(speed, topMotor.getSetpoint(), Constants.Tests.DELTA);
@@ -93,7 +93,7 @@ public class ShooterTest {
   }
 
   @Test
-  void setBothSetpointsSeparate() {
+  void testSetBothSetpointsSeparate() {
     shooter.setSpeed(50, 25);
     assertEquals(50, topMotor.getSetpoint(), Constants.Tests.DELTA);
     assertEquals(25, bottomMotor.getSetpoint(), Constants.Tests.DELTA);

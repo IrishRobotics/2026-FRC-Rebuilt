@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-/** The class for the Shooter subsystem */
+/** This class controls the robot's shooter */
 public class Shooter extends SubsystemBase implements AutoCloseable {
   private final SparkMax topMotor = new SparkMax(Constants.Shooter.TOP_MOTOR, MotorType.kBrushless);
   private final SparkClosedLoopController topMotorController = topMotor.getClosedLoopController();
@@ -55,7 +55,7 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
   }
 
   /**
-   * Sets the speed of the top and bottom variable separately
+   * Sets the speed of the top and bottom motors separately
    *
    * @param topSpeed top setpoint in RPM
    * @param bottomSpeed bottom setpoint in RPM

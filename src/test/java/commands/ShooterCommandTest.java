@@ -21,7 +21,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class ShooterCommandTest {
+class ShooterCommandTest {
   private Shooter shooter;
   private SparkMaxSim topMotor;
   private SparkMaxSim bottomMotor;
@@ -91,9 +91,9 @@ public class ShooterCommandTest {
   }
 
   @Test
-  void setBothSetpoints() {
+  void testSetBothSetpoints() {
     final double speed = 10;
-    Command testCommand = shooter.runAtSpeed(10);
+    Command testCommand = shooter.runAtSpeed(speed);
     CommandScheduler.getInstance().schedule(testCommand);
     CommandScheduler.getInstance().run();
 
@@ -110,7 +110,7 @@ public class ShooterCommandTest {
   }
 
   @Test
-  void setBothSetpointsSeparate() {
+  void testSetBothSetpointsSeparate() {
     final double topSpeed = 50;
     final double bottomSpeed = 25;
     Command testCommand = shooter.runAtSpeed(topSpeed, bottomSpeed);
