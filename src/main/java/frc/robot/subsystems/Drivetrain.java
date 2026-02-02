@@ -4,11 +4,17 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.hardware.Pigeon2;
 import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
+import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
+import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -28,6 +34,25 @@ public class Drivetrain extends SubsystemBase implements AutoCloseable {
   private SparkMax backRightMotor =
       new SparkMax(Constants.Drivetrain.BACK_RIGHT_MOTOR, MotorType.kBrushless);
   private double speed = Constants.Drivetrain.LOW_SPEED;
+  private Pigeon2 imu = new Pigeon2(Constants.Sensors.PIGEON_ID);
+  private Translation2d frontLeftTranslate =
+      new Translation2d(
+          Constants.Drivetrain.WHEEL_LENGTH / 2, Constants.Drivetrain.WHEEL_WIDTH / 2);
+  private Translation2d frontRightTranslate =
+      new Translation2d(
+          Constants.Drivetrain.WHEEL_LENGTH / 2, -Constants.Drivetrain.WHEEL_WIDTH / 2);
+  private Translation2d backLeftTranslate =
+      new Translation2d(
+          -Constants.Drivetrain.WHEEL_LENGTH / 2, Constants.Drivetrain.WHEEL_WIDTH / 2);
+  private Translation2d backRightTranslate =
+      new Translation2d(
+          -Constants.Drivetrain.WHEEL_LENGTH / 2, -Constants.Drivetrain.WHEEL_WIDTH / 2);
+  private MecanumDriveKinematics kinematics =
+      new MecanumDriveKinematics(
+          frontLeftTranslate, frontRightTranslate, backLeftTranslate, backRightTranslate);
+  private Pose2d robotPose = new Pose2d();
+  private MecanumDriveOdometry odometry =
+      new MecanumDriveOdometry(kinematics, imu.getRotation2d(), getPositions(), robotPose);
 
   private MecanumDrive drive =
       new MecanumDrive(frontLeftMotor, backLeftMotor, frontRightMotor, backRightMotor);
@@ -47,6 +72,18 @@ public class Drivetrain extends SubsystemBase implements AutoCloseable {
         defaultConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
     backRightMotor.configure(
         invertedConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+  }
+
+  @Override
+  public void periodic() {
+    robotPose = odometry.update(imu.getRotation2d(), getPositions());
+  }
+
+  /**
+   * @return the robot's pose
+   */
+  public Pose2d getPose() {
+    return robotPose;
   }
 
   /**
@@ -73,7 +110,7 @@ public class Drivetrain extends SubsystemBase implements AutoCloseable {
           double forward = controller.getLeftY();
           double strafe = controller.getLeftX();
           double turn = controller.getRightX();
-          if(squareInputs) {
+          if (squareInputs) {
             forward = Math.copySign(forward * forward, forward);
             strafe = Math.copySign(strafe * strafe, strafe);
             turn = Math.copySign(turn * turn, turn);
@@ -135,5 +172,13 @@ public class Drivetrain extends SubsystemBase implements AutoCloseable {
     frontRightMotor.close();
     backLeftMotor.close();
     backRightMotor.close();
+  }
+
+  private MecanumDriveWheelPositions getPositions() {
+    return new MecanumDriveWheelPositions(
+        frontLeftMotor.getEncoder().getPosition(),
+        frontRightMotor.getEncoder().getPosition(),
+        backLeftMotor.getEncoder().getPosition(),
+        backRightMotor.getEncoder().getPosition());
   }
 }
