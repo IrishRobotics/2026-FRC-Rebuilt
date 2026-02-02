@@ -64,12 +64,21 @@ public class Drivetrain extends SubsystemBase implements AutoCloseable {
    * A command factory for driving controlled by a controller
    *
    * @param controller the controller movement will be pulled from
+   * @param squareInputs whether to square the controller inputs
    * @return a command that moves according to controller input
    */
-  public Command operatorDrive(CommandXboxController controller) {
+  public Command operatorDrive(CommandXboxController controller, boolean squareInputs) {
     return new RunCommand(
         () -> {
-          this.drive(controller.getRightY(), controller.getRightX(), controller.getLeftX());
+          double forward = controller.getLeftY();
+          double strafe = controller.getLeftX();
+          double turn = controller.getRightX();
+          if(squareInputs) {
+            forward = Math.copySign(forward * forward, forward);
+            strafe = Math.copySign(strafe * strafe, strafe);
+            turn = Math.copySign(turn * turn, turn);
+          }
+          this.drive(forward, strafe, turn);
         },
         this);
   }

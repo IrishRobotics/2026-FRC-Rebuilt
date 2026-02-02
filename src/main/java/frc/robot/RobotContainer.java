@@ -24,7 +24,7 @@ public class RobotContainer {
 
     drivetrain = new Drivetrain();
 
-    drivetrain.setDefaultCommand(drivetrain.operatorDrive(driverController));
+    drivetrain.setDefaultCommand(drivetrain.operatorDrive(driverController, true));
 
     configureBindings();
   }
