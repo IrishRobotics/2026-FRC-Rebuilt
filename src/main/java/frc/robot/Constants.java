@@ -44,13 +44,16 @@ public final class Constants {
 
     /** The motor id for the motor on the top of the shooter */
     public static final int TOP_MOTOR = 5;
+
     /** The motor id for the motor on the bottom of the shooter */
     public static final int BOTTOM_MOTOR = 6;
 
     /** The proportional PID constant */
     public static final double PID_P = 0.01;
+
     /** The integral PID constant */
     public static final double PID_I = 0.0;
+
     /** The derivative PID constant */
     public static final double PID_D = 0.0;
   }
