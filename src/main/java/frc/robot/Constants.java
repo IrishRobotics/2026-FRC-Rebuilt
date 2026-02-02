@@ -4,7 +4,7 @@ package frc.robot;
 public final class Constants {
   private Constants() {}
 
-  /** This class holds constants related to controlling the robot */
+  /** Constants related to controlling the robot */
   public static class Control {
     private Control() {}
 
@@ -15,7 +15,7 @@ public final class Constants {
     public static final int COOP_CONTROLLER_PORT = 1;
   }
 
-  /** This class holds constants related to the drive system */
+  /** Constants related to the drive system */
   public static class Drivetrain {
     private Drivetrain() {}
 
@@ -38,7 +38,24 @@ public final class Constants {
     public static final double LOW_SPEED = 0.5;
   }
 
-  /** This class holds constants used in tests */
+  /** Constants for the shooter subsystem */
+  public static class Shooter {
+    private Shooter() {}
+
+    /** The motor id for the motor on the top of the shooter */
+    public static final int TOP_MOTOR = 5;
+    /** The motor id for the motor on the bottom of the shooter */
+    public static final int BOTTOM_MOTOR = 6;
+
+    /** The proportional PID constant */
+    public static final double PID_P = 0.1;
+    /** The integral PID constant */
+    public static final double PID_I = 0.0;
+    /** The derivative PID constant */
+    public static final double PID_D = 0.0;
+  }
+
+  /** Constants used in tests */
   public static class Tests {
     private Tests() {}
 
