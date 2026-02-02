@@ -48,7 +48,7 @@ public final class Constants {
     public static final int BOTTOM_MOTOR = 6;
 
     /** The proportional PID constant */
-    public static final double PID_P = 0.1;
+    public static final double PID_P = 0.01;
     /** The integral PID constant */
     public static final double PID_I = 0.0;
     /** The derivative PID constant */
