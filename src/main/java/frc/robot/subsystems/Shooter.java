@@ -43,9 +43,9 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
     invertedConfig.inverted(true);
     // TODO: find what motor needs to be inverted
     bottomMotor.configure(
-        defaultConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+        defaultConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     topMotor.configure(
-        invertedConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+        invertedConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
   /** Stops both motors */
