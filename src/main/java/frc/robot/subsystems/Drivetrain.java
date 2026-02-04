@@ -75,17 +75,6 @@ public class Drivetrain extends SubsystemBase implements AutoCloseable {
   }
 
   /**
-   * Gets all motors for use by tests and sets the deadband to zero.
-   *
-   * @return {fl, fr, bl, br}
-   */
-  public SparkMax[] testMode() {
-    drive.setDeadband(0);
-    SparkMax[] motors = {frontLeftMotor, frontRightMotor, backLeftMotor, backRightMotor};
-    return motors;
-  }
-
-  /**
    * Sets the max speed of the robot
    *
    * @param newSpeed [0,1]
