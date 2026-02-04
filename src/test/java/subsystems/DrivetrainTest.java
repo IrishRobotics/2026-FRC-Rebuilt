@@ -3,11 +3,15 @@ package subsystems;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
+import java.lang.reflect.Field;
 
 import com.revrobotics.sim.SparkMaxSim;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.hal.HAL;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
@@ -17,10 +21,10 @@ import org.junit.jupiter.api.Test;
 
 class DrivetrainTest {
   private Drivetrain drivetrain;
-  private SparkMaxSim frontLeftMotorSimulation;
-  private SparkMaxSim frontRightMotorSimulation;
-  private SparkMaxSim backLeftMotorSimulation;
-  private SparkMaxSim backRightMotorSimulation;
+  private SparkMaxSim frontLeftMotor;
+  private SparkMaxSim frontRightMotor;
+  private SparkMaxSim backLeftMotor;
+  private SparkMaxSim backRightMotor;
 
   @BeforeEach
   void setup() {
@@ -28,11 +32,27 @@ class DrivetrainTest {
     drivetrain = new Drivetrain();
     drivetrain.setSpeed(1);
 
-    final SparkMax[] motors = drivetrain.testMode();
-    frontLeftMotorSimulation = new SparkMaxSim(motors[0], DCMotor.getNEO(1));
-    frontRightMotorSimulation = new SparkMaxSim(motors[1], DCMotor.getNEO(1));
-    backLeftMotorSimulation = new SparkMaxSim(motors[2], DCMotor.getNEO(1));
-    backRightMotorSimulation = new SparkMaxSim(motors[3], DCMotor.getNEO(1));
+    try {
+      final Field frontLeftField = drivetrain.getClass().getDeclaredField("frontLeftMotor");
+      frontLeftField.setAccessible(true);
+      frontLeftMotor = new SparkMaxSim((SparkMax) frontLeftField.get(drivetrain), DCMotor.getNEO(1));
+      final Field frontRightField = drivetrain.getClass().getDeclaredField("frontRightMotor");
+      frontRightField.setAccessible(true);
+      frontRightMotor = new SparkMaxSim((SparkMax) frontRightField.get(drivetrain), DCMotor.getNEO(1));
+      final Field backLeftField = drivetrain.getClass().getDeclaredField("backLeftMotor");
+      backLeftField.setAccessible(true);
+      backLeftMotor = new SparkMaxSim((SparkMax) backLeftField.get(drivetrain), DCMotor.getNEO(1));
+      final Field backRightField = drivetrain.getClass().getDeclaredField("backRightMotor");
+      backRightField.setAccessible(true);
+      backRightMotor = new SparkMaxSim((SparkMax) backRightField.get(drivetrain), DCMotor.getNEO(1));
+
+      final Field mecanumDrivetrainField = drivetrain.getClass().getDeclaredField("drive");
+      mecanumDrivetrainField.setAccessible(true);
+      ((MecanumDrive) mecanumDrivetrainField.get(drivetrain)).setDeadband(0);
+    } catch (NoSuchFieldException | IllegalAccessException e) {
+      e.printStackTrace();
+      fail("Failed to access motor fields via reflection");
+    }
   }
 
   @SuppressWarnings("PMD.SignatureDeclareThrowsException")
@@ -44,64 +64,64 @@ class DrivetrainTest {
   @Test
   void testDriveZero() {
     drivetrain.drive(0, 0, 0);
-    assertEquals(0.0, frontLeftMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
-    assertEquals(0.0, frontRightMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
-    assertEquals(0.0, backLeftMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
-    assertEquals(0.0, backRightMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
+    assertEquals(0.0, frontLeftMotor.getSetpoint(), Constants.Tests.DELTA);
+    assertEquals(0.0, frontRightMotor.getSetpoint(), Constants.Tests.DELTA);
+    assertEquals(0.0, backLeftMotor.getSetpoint(), Constants.Tests.DELTA);
+    assertEquals(0.0, backRightMotor.getSetpoint(), Constants.Tests.DELTA);
   }
 
   @Test
   void testDriveForward() {
     drivetrain.drive(1, 0, 0);
-    assertEquals(1.0, frontLeftMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
-    assertEquals(1.0, frontRightMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
-    assertEquals(1.0, backLeftMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
-    assertEquals(1.0, backRightMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
+    assertEquals(1.0, frontLeftMotor.getSetpoint(), Constants.Tests.DELTA);
+    assertEquals(1.0, frontRightMotor.getSetpoint(), Constants.Tests.DELTA);
+    assertEquals(1.0, backLeftMotor.getSetpoint(), Constants.Tests.DELTA);
+    assertEquals(1.0, backRightMotor.getSetpoint(), Constants.Tests.DELTA);
   }
 
   @Test
   void testDriveBackward() {
     drivetrain.drive(-1, 0, 0);
-    assertEquals(-1.0, frontLeftMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
-    assertEquals(-1.0, frontRightMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
-    assertEquals(-1.0, backLeftMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
-    assertEquals(-1.0, backRightMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
+    assertEquals(-1.0, frontLeftMotor.getSetpoint(), Constants.Tests.DELTA);
+    assertEquals(-1.0, frontRightMotor.getSetpoint(), Constants.Tests.DELTA);
+    assertEquals(-1.0, backLeftMotor.getSetpoint(), Constants.Tests.DELTA);
+    assertEquals(-1.0, backRightMotor.getSetpoint(), Constants.Tests.DELTA);
   }
 
   @Test
   void testDriveLeft() {
     drivetrain.drive(0, -1, 0);
-    assertEquals(-1.0, frontLeftMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
-    assertEquals(1.0, frontRightMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
-    assertEquals(1.0, backLeftMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
-    assertEquals(-1.0, backRightMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
+    assertEquals(-1.0, frontLeftMotor.getSetpoint(), Constants.Tests.DELTA);
+    assertEquals(1.0, frontRightMotor.getSetpoint(), Constants.Tests.DELTA);
+    assertEquals(1.0, backLeftMotor.getSetpoint(), Constants.Tests.DELTA);
+    assertEquals(-1.0, backRightMotor.getSetpoint(), Constants.Tests.DELTA);
   }
 
   @Test
   void testDriveRight() {
     drivetrain.drive(0, 1, 0);
-    assertEquals(1.0, frontLeftMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
-    assertEquals(-1.0, frontRightMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
-    assertEquals(-1.0, backLeftMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
-    assertEquals(1.0, backRightMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
+    assertEquals(1.0, frontLeftMotor.getSetpoint(), Constants.Tests.DELTA);
+    assertEquals(-1.0, frontRightMotor.getSetpoint(), Constants.Tests.DELTA);
+    assertEquals(-1.0, backLeftMotor.getSetpoint(), Constants.Tests.DELTA);
+    assertEquals(1.0, backRightMotor.getSetpoint(), Constants.Tests.DELTA);
   }
 
   @Test
   void testTurnRight() {
     drivetrain.drive(0, 0, 1);
-    assertEquals(1.0, frontLeftMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
-    assertEquals(-1.0, frontRightMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
-    assertEquals(1.0, backLeftMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
-    assertEquals(-1.0, backRightMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
+    assertEquals(1.0, frontLeftMotor.getSetpoint(), Constants.Tests.DELTA);
+    assertEquals(-1.0, frontRightMotor.getSetpoint(), Constants.Tests.DELTA);
+    assertEquals(1.0, backLeftMotor.getSetpoint(), Constants.Tests.DELTA);
+    assertEquals(-1.0, backRightMotor.getSetpoint(), Constants.Tests.DELTA);
   }
 
   @Test
   void testDriveForwardRight() {
     drivetrain.drive(1, 1, 0);
-    assertEquals(1.0, frontLeftMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
-    assertEquals(0.0, frontRightMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
-    assertEquals(0.0, backLeftMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
-    assertEquals(1.0, backRightMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
+    assertEquals(1.0, frontLeftMotor.getSetpoint(), Constants.Tests.DELTA);
+    assertEquals(0.0, frontRightMotor.getSetpoint(), Constants.Tests.DELTA);
+    assertEquals(0.0, backLeftMotor.getSetpoint(), Constants.Tests.DELTA);
+    assertEquals(1.0, backRightMotor.getSetpoint(), Constants.Tests.DELTA);
   }
 
   @Test
@@ -109,16 +129,15 @@ class DrivetrainTest {
     drivetrain.setSpeed(0.5);
     assertEquals(drivetrain.getSpeed(), 0.5, Constants.Tests.DELTA);
     drivetrain.drive(1, 0, 0);
-    assertEquals(0.5, frontLeftMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
-    assertEquals(0.5, frontRightMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
-    assertEquals(0.5, backLeftMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
-    assertEquals(0.5, backRightMotorSimulation.getSetpoint(), Constants.Tests.DELTA);
+    assertEquals(0.5, frontLeftMotor.getSetpoint(), Constants.Tests.DELTA);
+    assertEquals(0.5, frontRightMotor.getSetpoint(), Constants.Tests.DELTA);
+    assertEquals(0.5, backLeftMotor.getSetpoint(), Constants.Tests.DELTA);
+    assertEquals(0.5, backRightMotor.getSetpoint(), Constants.Tests.DELTA);
   }
 
   @Test
   void testDriveSpeedException() {
-    Exception exception =
-        assertThrows(IllegalArgumentException.class, () -> drivetrain.setSpeed(1.5));
+    Exception exception = assertThrows(IllegalArgumentException.class, () -> drivetrain.setSpeed(1.5));
 
     String expectedMessage = "Value 1.5 not in range [0.0, 1.0]";
     String actualMessage = exception.getMessage();
