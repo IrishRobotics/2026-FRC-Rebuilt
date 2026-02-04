@@ -5,8 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import java.lang.reflect.Field;
-
 import com.revrobotics.sim.SparkMaxSim;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.hal.HAL;
@@ -15,6 +13,7 @@ import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Constants;
 import frc.robot.subsystems.Drivetrain;
+import java.lang.reflect.Field;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,16 +34,19 @@ class DrivetrainTest {
     try {
       final Field frontLeftField = drivetrain.getClass().getDeclaredField("frontLeftMotor");
       frontLeftField.setAccessible(true);
-      frontLeftMotor = new SparkMaxSim((SparkMax) frontLeftField.get(drivetrain), DCMotor.getNEO(1));
+      frontLeftMotor =
+          new SparkMaxSim((SparkMax) frontLeftField.get(drivetrain), DCMotor.getNEO(1));
       final Field frontRightField = drivetrain.getClass().getDeclaredField("frontRightMotor");
       frontRightField.setAccessible(true);
-      frontRightMotor = new SparkMaxSim((SparkMax) frontRightField.get(drivetrain), DCMotor.getNEO(1));
+      frontRightMotor =
+          new SparkMaxSim((SparkMax) frontRightField.get(drivetrain), DCMotor.getNEO(1));
       final Field backLeftField = drivetrain.getClass().getDeclaredField("backLeftMotor");
       backLeftField.setAccessible(true);
       backLeftMotor = new SparkMaxSim((SparkMax) backLeftField.get(drivetrain), DCMotor.getNEO(1));
       final Field backRightField = drivetrain.getClass().getDeclaredField("backRightMotor");
       backRightField.setAccessible(true);
-      backRightMotor = new SparkMaxSim((SparkMax) backRightField.get(drivetrain), DCMotor.getNEO(1));
+      backRightMotor =
+          new SparkMaxSim((SparkMax) backRightField.get(drivetrain), DCMotor.getNEO(1));
 
       final Field mecanumDrivetrainField = drivetrain.getClass().getDeclaredField("drive");
       mecanumDrivetrainField.setAccessible(true);
@@ -137,7 +139,8 @@ class DrivetrainTest {
 
   @Test
   void testDriveSpeedException() {
-    Exception exception = assertThrows(IllegalArgumentException.class, () -> drivetrain.setSpeed(1.5));
+    Exception exception =
+        assertThrows(IllegalArgumentException.class, () -> drivetrain.setSpeed(1.5));
 
     String expectedMessage = "Value 1.5 not in range [0.0, 1.0]";
     String actualMessage = exception.getMessage();
