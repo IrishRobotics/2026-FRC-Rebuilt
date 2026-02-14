@@ -38,6 +38,12 @@ public final class Constants {
     public static final double LOW_SPEED = 0.5;
   }
 
+  public static class Intake {
+    public static final int PIVOT_MOTOR = 6;
+    public static final int WHEEL_MOTOR = 7;
+    public static final double WHEEL_SPEED = 0.7;
+  }
+
   /** This class holds constants used in tests */
   public static class Tests {
     private Tests() {}
