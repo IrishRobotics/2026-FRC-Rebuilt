@@ -4,7 +4,10 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -13,10 +16,48 @@ public class Intake extends SubsystemBase {
   private TalonSRX wheelMotor = new TalonSRX(Constants.Intake.WHEEL_MOTOR);
 
   /** Creates a new Intake. */
-  public Intake() {}
+  public Intake() {
+    // pivotMotor.setInverted(InvertType.InvertMotorOutput);
+  }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+
+  public Command ArmUp() {
+    return new StartEndCommand(this::ArmUpManual, this::StopArm, this);
+  }
+
+  public Command ArmDown() {
+    return new StartEndCommand(this::ArmDownManual, this::StopArm, this);
+  }
+
+  public Command WheelIn() {
+    return new StartEndCommand(this::In, this::StopArm, this);
+  }
+
+  private void StopArm() {
+    pivotMotor.set(TalonSRXControlMode.PercentOutput, 0);
+  }
+
+  private void ArmUpManual() {
+    pivotMotor.set(TalonSRXControlMode.PercentOutput, 0.5);
+  }
+
+  private void ArmDownManual() {
+    pivotMotor.set(TalonSRXControlMode.PercentOutput, -0.5);
+  }
+
+  private void StopWheel() {
+    wheelMotor.set(TalonSRXControlMode.PercentOutput, 0);
+  }
+
+  private void In() {
+    wheelMotor.set(TalonSRXControlMode.PercentOutput, Constants.Intake.WHEEL_SPEED);
+  }
+
+  private void Out() {
+    wheelMotor.set(TalonSRXControlMode.PercentOutput, -Constants.Intake.WHEEL_SPEED);
   }
 }
