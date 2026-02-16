@@ -39,9 +39,16 @@ public final class Constants {
   }
 
   public static class Intake {
-    public static final int PIVOT_MOTOR = 6;
-    public static final int WHEEL_MOTOR = 7;
+    public static final int PIVOT_MOTOR = 7;
+    public static final int WHEEL_MOTOR = 8;
+    /** The speed limit for intake movement */
     public static final double WHEEL_SPEED = 0.7;
+  }
+  public static class Shooter {
+    public static final int TOP_MOTOR = 4;
+    public static final int BOTTOM_MOTOR = 5;
+    public static final int FEEDER_MOTOR = 6;
+    public static final double WHEEL_SPEED = 0.8;
   }
 
   /** This class holds constants used in tests */
