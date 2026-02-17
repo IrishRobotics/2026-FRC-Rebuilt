@@ -31,6 +31,8 @@ public final class Constants {
     /** The motor id for the motor in the back right of the bot */
     public static final int BACK_RIGHT_MOTOR = 4;
 
+    public static final int IMU_ID = 20;
+
     /** The high-speed limit for drivetrain movement */
     public static final double HIGH_SPEED = 0.75;
 
@@ -39,16 +41,16 @@ public final class Constants {
   }
 
   public static class Intake {
-    public static final int PIVOT_MOTOR = 7;
-    public static final int WHEEL_MOTOR = 8;
+    public static final int PIVOT_MOTOR = 8;
+    public static final int WHEEL_MOTOR = 9;
     /** The speed limit for intake movement */
     public static final double WHEEL_SPEED = 0.7;
   }
   public static class Shooter {
-    public static final int TOP_MOTOR = 4;
+    public static final int TOP_MOTOR = 6;
     public static final int BOTTOM_MOTOR = 5;
-    public static final int FEEDER_MOTOR = 6;
-    public static final double WHEEL_SPEED = 0.8;
+    public static final int FEEDER_MOTOR = 7;
+    public static final double WHEEL_SPEED = 0.75;
   }
 
   /** This class holds constants used in tests */

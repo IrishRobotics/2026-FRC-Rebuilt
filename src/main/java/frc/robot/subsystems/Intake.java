@@ -6,6 +6,9 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
+
+import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -17,7 +20,6 @@ public class Intake extends SubsystemBase {
 
   /** Creates a new Intake. */
   public Intake() {
-    // pivotMotor.setInverted(InvertType.InvertMotorOutput);
   }
 
   @Override
@@ -34,7 +36,7 @@ public class Intake extends SubsystemBase {
   }
 
   public Command WheelIn() {
-    return new StartEndCommand(this::In, this::StopArm, this);
+    return new StartEndCommand(this::In, this::StopWheel, this);
   }
 
   private void StopArm() {

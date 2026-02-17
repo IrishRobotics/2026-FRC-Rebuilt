@@ -9,6 +9,8 @@ import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
@@ -18,22 +20,24 @@ import frc.robot.Constants;
 public class Shooter extends SubsystemBase {
   private SparkMax topMotor = new SparkMax(Constants.Shooter.TOP_MOTOR, MotorType.kBrushless);
   private SparkMax bottomMotor = new SparkMax(Constants.Shooter.BOTTOM_MOTOR, MotorType.kBrushless);
-  private SparkMax feederMotor = new SparkMax(Constants.Shooter.FEEDER_MOTOR, MotorType.kBrushless);
+  // private SparkMax feederMotor = new SparkMax(Constants.Shooter.FEEDER_MOTOR, MotorType.kBrushless);
 
   /** Creates a new shooter. */
   public Shooter() {
 
     SparkMaxConfig defaultConfig = new SparkMaxConfig();
     defaultConfig.inverted(false);
+    defaultConfig.idleMode(IdleMode.kCoast);
     SparkMaxConfig invertedConfig = new SparkMaxConfig();
     invertedConfig.inverted(true);
+    invertedConfig.idleMode(IdleMode.kCoast);
 
     topMotor.configure(
         defaultConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     bottomMotor.configure(
         invertedConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    feederMotor.configure(
-        defaultConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    // feederMotor.configure(
+    //     defaultConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
   @Override
@@ -46,13 +50,13 @@ public class Shooter extends SubsystemBase {
         () -> {
           topMotor.set(Constants.Shooter.WHEEL_SPEED);
           bottomMotor.set(Constants.Shooter.WHEEL_SPEED);
-          Timer.delay(0.5);
-          feederMotor.set(0.5);
+          // Timer.delay(0.5);
+          // feederMotor.set(0.5);
         },
         () -> {
           topMotor.stopMotor();
           bottomMotor.stopMotor();
-          feederMotor.stopMotor();
+          // feederMotor.stopMotor();
         },
         this);
   }

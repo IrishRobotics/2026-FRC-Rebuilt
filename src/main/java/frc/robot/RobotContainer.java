@@ -37,10 +37,12 @@ public class RobotContainer {
 
   private void configureBindings() {
     driverController.start().whileTrue(Debug.triggered("Driver A"));
-    coopController.start().whileTrue(Debug.triggered("Coop A"));
+    // coopController.start().whileTrue(Debug.triggered("Coop A"));
 
     driverController.rightTrigger().whileTrue(intake.WheelIn());
     driverController.leftTrigger().whileTrue(shooter.RunShooter());
+    driverController.y().whileTrue(intake.ArmUp());
+    driverController.a().whileTrue(intake.ArmDown());
   }
 
   /**
