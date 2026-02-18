@@ -11,6 +11,7 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -67,10 +68,13 @@ public class Drivetrain extends SubsystemBase implements AutoCloseable {
    * @return a command that moves according to controller input
    */
   public Command operatorDrive(CommandXboxController controller) {
-    return new RunCommand(
+    return new FunctionalCommand(
+        () -> {},
         () -> {
           this.drive(-controller.getRightY(), controller.getRightX(), controller.getLeftX());
         },
+        (interupted) -> {drive(0,0,0);},
+        () -> false,
         this);
   }
 
