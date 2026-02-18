@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -16,6 +17,7 @@ import frc.robot.subsystems.Shooter;
 public class RobotContainer {
   private final CommandXboxController driverController;
   private final CommandXboxController coopController;
+  private final UsbCamera shootCamera;
 
   private final Drivetrain drivetrain;
   private final Intake intake;
@@ -25,6 +27,8 @@ public class RobotContainer {
   public RobotContainer() {
     driverController = new CommandXboxController(Constants.Control.DRIVER_CONTROLLER_PORT);
     coopController = new CommandXboxController(Constants.Control.COOP_CONTROLLER_PORT);
+
+    shootCamera = new UsbCamera("ShootCam", 0);
 
     drivetrain = new Drivetrain();
     intake = new Intake();
