@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.Debug;
+import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
@@ -23,6 +24,7 @@ public class RobotContainer {
   private final Drivetrain drivetrain;
   private final Intake intake;
   private final Shooter shooter;
+  private final Arm arm;
 
   /** A controller for the robot */
   public RobotContainer() {
@@ -35,6 +37,7 @@ public class RobotContainer {
     drivetrain = new Drivetrain();
     intake = new Intake();
     shooter = new Shooter();
+    arm = new Arm();
 
     drivetrain.setDefaultCommand(drivetrain.operatorDrive(driverController));
 
@@ -45,10 +48,10 @@ public class RobotContainer {
     driverController.start().whileTrue(Debug.triggered("Driver A"));
     // coopController.start().whileTrue(Debug.triggered("Coop A"));
 
-    coopController.rightTrigger().whileTrue(intake.WheelIn());
+    coopController.rightTrigger().whileTrue(intake.runIntake(Constants.Intake.WHEEL_SPEED));
     coopController.leftTrigger().whileTrue(shooter.runAtSpeed(1000));
-    coopController.y().whileTrue(intake.ArmUp());
-    coopController.a().whileTrue(intake.ArmDown());
+    coopController.y().whileTrue(arm.runArm(0.5));
+    coopController.a().whileTrue(arm.runArm(-0.5));
     coopController.povUp().whileTrue(shooter.runFeeder(Constants.Shooter.FEEDER_POWER));
   }
 

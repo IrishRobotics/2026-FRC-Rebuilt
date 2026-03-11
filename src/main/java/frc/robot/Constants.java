@@ -1,5 +1,7 @@
 package frc.robot;
 
+import edu.wpi.first.units.PerUnit;
+
 /** The Constants class holds all "Magic Numbers" and other constants */
 public final class Constants {
   private Constants() {}
@@ -30,8 +32,15 @@ public final class Constants {
     public static final double LOW_SPEED = 0.5;
   }
 
+  public static class Arm {
+    public static final int ARM_MOTOR = 8;
+
+    public static final double PID_P = 0.01;
+    public static final double PID_I = 0;
+    public static final double PID_D = 0;
+  }
+
   public static class Intake {
-    public static final int PIVOT_MOTOR = 8;
     public static final int WHEEL_MOTOR = 9;
 
     /** The speed limit for intake movement */
