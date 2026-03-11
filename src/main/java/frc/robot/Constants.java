@@ -8,10 +8,7 @@ public final class Constants {
   public static class Control {
     private Control() {}
 
-    /** This is the gamepad port for the driver's controller */
     public static final int DRIVER_CONTROLLER_PORT = 0;
-
-    /** This is the gamepad port for the co-driver's controller */
     public static final int COOP_CONTROLLER_PORT = 1;
   }
 
@@ -19,16 +16,9 @@ public final class Constants {
   public static class Drivetrain {
     private Drivetrain() {}
 
-    /** The motor id for the motor in the front left of the bot */
     public static final int FRONT_LEFT_MOTOR = 1;
-
-    /** The motor id for the motor in the front right of the bot */
     public static final int FRONT_RIGHT_MOTOR = 2;
-
-    /** The motor id for the motor in the back left of the bot */
     public static final int BACK_LEFT_MOTOR = 3;
-
-    /** The motor id for the motor in the back right of the bot */
     public static final int BACK_RIGHT_MOTOR = 4;
 
     public static final int IMU_ID = 20;
@@ -52,9 +42,13 @@ public final class Constants {
     public static final int TOP_MOTOR = 6;
     public static final int BOTTOM_MOTOR = 5;
     public static final int FEEDER_MOTOR = 7;
-    public static final double WHEEL_SPEED = 0.75;
+
+    public static final double SHOOTER_RPM = 5000;
+    public static final double FEEDER_POWER = 0.5;
+    public static final double FEEDER_WAIT = 0.5;
+
     public static final double PID_P = 0.01;
-    public static final double PID_I = 0;
+    public static final double PID_I = 0.00005;
     public static final double PID_D = 0;
   }
 

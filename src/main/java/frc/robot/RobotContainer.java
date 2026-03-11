@@ -49,7 +49,7 @@ public class RobotContainer {
     coopController.leftTrigger().whileTrue(shooter.runAtSpeed(1000));
     coopController.y().whileTrue(intake.ArmUp());
     coopController.a().whileTrue(intake.ArmDown());
-    coopController.povUp().whileTrue(shooter.RunFeeder());
+    coopController.povUp().whileTrue(shooter.runFeeder(Constants.Shooter.FEEDER_POWER));
   }
 
   /**
