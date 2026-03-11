@@ -12,6 +12,14 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -25,6 +33,8 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
       new SparkMax(Constants.Shooter.BOTTOM_MOTOR, MotorType.kBrushless);
   private final SparkClosedLoopController bottomMotorController =
       bottomMotor.getClosedLoopController();
+  private SparkMax feederMotor = new SparkMax(Constants.Shooter.FEEDER_MOTOR, MotorType.kBrushless);
+
 
   /** Creates a new shooter with the values in Constants */
   public Shooter() {
@@ -41,10 +51,12 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
 
     SparkMaxConfig invertedConfig = new SparkMaxConfig().apply(defaultConfig);
     invertedConfig.inverted(true);
-    // TODO: find what motor needs to be inverted
-    bottomMotor.configure(
-        defaultConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
     topMotor.configure(
+        defaultConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    bottomMotor.configure(
+        invertedConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    feederMotor.configure(
         invertedConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
@@ -99,5 +111,29 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
   public void close() {
     topMotor.close();
     bottomMotor.close();
+  }
+  public Command RunFeeder(){
+    return new StartEndCommand(
+        () -> {
+          feederMotor.set(0.5);
+        },
+        () -> {
+          feederMotor.stopMotor();
+        },
+        this);}
+
+  public Command RunShooter() {
+    return new StartEndCommand(
+        () -> {
+          setSpeed(Constants.Shooter.WHEEL_SPEED);
+          Timer.delay(0.5);
+          feederMotor.set(0.5);
+        },
+        () -> {
+          topMotor.stopMotor();
+          bottomMotor.stopMotor();
+          feederMotor.stopMotor();
+        },
+        this);
   }
 }
