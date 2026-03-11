@@ -6,7 +6,6 @@ package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -30,9 +29,8 @@ public class RobotContainer {
     driverController = new CommandXboxController(Constants.Control.DRIVER_CONTROLLER_PORT);
     coopController = new CommandXboxController(Constants.Control.COOP_CONTROLLER_PORT);
 
-    shootCamera =  CameraServer.startAutomaticCapture();
+    shootCamera = CameraServer.startAutomaticCapture();
     shootCamera.setResolution(480, 360);
-   
 
     drivetrain = new Drivetrain();
     intake = new Intake();
@@ -48,7 +46,7 @@ public class RobotContainer {
     // coopController.start().whileTrue(Debug.triggered("Coop A"));
 
     coopController.rightTrigger().whileTrue(intake.WheelIn());
-    coopController.leftTrigger().whileTrue(shooter.RunShooter());
+    coopController.leftTrigger().whileTrue(shooter.runAtSpeed(1000));
     coopController.y().whileTrue(intake.ArmUp());
     coopController.a().whileTrue(intake.ArmDown());
     coopController.povUp().whileTrue(shooter.RunFeeder());

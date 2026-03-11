@@ -4,7 +4,7 @@ package frc.robot;
 public final class Constants {
   private Constants() {}
 
-  /** This class holds constants related to controlling the robot */
+  /** Constants related to controlling the robot */
   public static class Control {
     private Control() {}
 
@@ -15,7 +15,7 @@ public final class Constants {
     public static final int COOP_CONTROLLER_PORT = 1;
   }
 
-  /** This class holds constants related to the drive system */
+  /** Constants related to the drive system */
   public static class Drivetrain {
     private Drivetrain() {}
 
@@ -43,9 +43,11 @@ public final class Constants {
   public static class Intake {
     public static final int PIVOT_MOTOR = 8;
     public static final int WHEEL_MOTOR = 9;
+
     /** The speed limit for intake movement */
     public static final double WHEEL_SPEED = 0.8;
   }
+
   public static class Shooter {
     public static final int TOP_MOTOR = 6;
     public static final int BOTTOM_MOTOR = 5;
