@@ -111,7 +111,9 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
   public void close() {
     topMotor.close();
     bottomMotor.close();
+    feederMotor.close();
   }
+  
   public Command RunFeeder(){
     return new StartEndCommand(
         () -> {
