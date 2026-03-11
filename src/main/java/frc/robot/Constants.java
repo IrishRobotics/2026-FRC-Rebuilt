@@ -44,13 +44,16 @@ public final class Constants {
     public static final int PIVOT_MOTOR = 8;
     public static final int WHEEL_MOTOR = 9;
     /** The speed limit for intake movement */
-    public static final double WHEEL_SPEED = 0.7;
+    public static final double WHEEL_SPEED = 0.8;
   }
   public static class Shooter {
     public static final int TOP_MOTOR = 6;
     public static final int BOTTOM_MOTOR = 5;
     public static final int FEEDER_MOTOR = 7;
     public static final double WHEEL_SPEED = 0.75;
+    public static final double PID_P = 0.01;
+    public static final double PID_I = 0;
+    public static final double PID_D = 0;
   }
 
   /** This class holds constants used in tests */

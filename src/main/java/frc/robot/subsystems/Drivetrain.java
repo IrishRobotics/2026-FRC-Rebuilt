@@ -69,7 +69,7 @@ public class Drivetrain extends SubsystemBase implements AutoCloseable {
   public Command operatorDrive(CommandXboxController controller) {
     return new RunCommand(
         () -> {
-          this.drive(-controller.getRightY(), controller.getRightX(), controller.getLeftX());
+          this.drive(-controller.getLeftY(), controller.getLeftX(), controller.getRightX());
         },
         this);
   }
