@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.PersistMode;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkClosedLoopController;
@@ -14,6 +15,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -21,8 +23,10 @@ import frc.robot.Constants;
 /** This class controls the robot's shooter */
 public class Shooter extends SubsystemBase implements AutoCloseable {
   private final SparkMax topMotor = new SparkMax(Constants.Shooter.TOP_MOTOR, MotorType.kBrushless);
+  private final RelativeEncoder topMotorEncoder = topMotor.getEncoder();
   private final SparkClosedLoopController topMotorController = topMotor.getClosedLoopController();
   private final SparkMax bottomMotor = new SparkMax(Constants.Shooter.BOTTOM_MOTOR, MotorType.kBrushless);
+  private final RelativeEncoder bottomMotorEncoder = bottomMotor.getEncoder();
   private final SparkClosedLoopController bottomMotorController = bottomMotor.getClosedLoopController();
   private final SparkMax feederMotor = new SparkMax(Constants.Shooter.FEEDER_MOTOR, MotorType.kBrushless);
 
@@ -32,11 +36,12 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
     // TODO: tune PID loop
     defaultConfig.closedLoop
         .p(Constants.Shooter.PID_P)
-        .d(Constants.Shooter.PID_D)
         .i(Constants.Shooter.PID_I)
+        .d(Constants.Shooter.PID_D)
         .outputRange(0, 1);
     defaultConfig.encoder.velocityConversionFactor(1);
     defaultConfig.idleMode(IdleMode.kCoast);
+    defaultConfig.smartCurrentLimit(30);
 
     SparkMaxConfig invertedConfig = new SparkMaxConfig().apply(defaultConfig);
     invertedConfig.inverted(true);
@@ -49,10 +54,17 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
         invertedConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
+  @Override
+  public void periodic() {
+    SmartDashboard.putNumber("Shooter: Top Motor", topMotorEncoder.getVelocity());
+    SmartDashboard.putNumber("Shooter: Bottom Motor", bottomMotorEncoder.getVelocity()); 
+  }
+
   /** Stops both motors */
   public void stop() {
     topMotor.stopMotor();
     bottomMotor.stopMotor();
+    feederMotor.stopMotor();
   }
 
   /**
@@ -77,6 +89,7 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
 
   /**
    * Sets the speed of the feeder motor
+   * 
    * @param speed
    */
   public void setFeederSpeed(double speed) {

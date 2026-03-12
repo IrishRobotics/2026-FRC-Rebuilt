@@ -22,9 +22,9 @@ public class RobotContainer {
   private final UsbCamera shootCamera;
 
   private final Drivetrain drivetrain;
-  private final Intake intake;
   private final Shooter shooter;
   private final Arm arm;
+  private final Intake intake;
 
   /** A controller for the robot */
   public RobotContainer() {
@@ -49,10 +49,11 @@ public class RobotContainer {
     // coopController.start().whileTrue(Debug.triggered("Coop A"));
 
     coopController.rightTrigger().whileTrue(intake.runIntake(Constants.Intake.WHEEL_SPEED));
-    coopController.leftTrigger().whileTrue(shooter.runAtSpeed(1000));
-    coopController.y().whileTrue(arm.runArm(0.5));
-    coopController.a().whileTrue(arm.runArm(-0.5));
+    coopController.leftTrigger().whileTrue(shooter.runAtSpeed(8000,0));
+    // coopController.y().whileTrue(arm.runArm(0.5));
+    // coopController.a().whileTrue(arm.runArm(-0.5));
     coopController.povUp().whileTrue(shooter.runFeeder(Constants.Shooter.FEEDER_POWER));
+    coopController.povDown().whileTrue(shooter.runShooter());
   }
 
   /**
