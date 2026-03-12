@@ -36,6 +36,8 @@ public final class Constants {
     public static final double PID_P = 0.01;
     public static final double PID_I = 0;
     public static final double PID_D = 0;
+
+    public static final int ENCODER_PORT = 0;
   }
 
   public static class Intake {

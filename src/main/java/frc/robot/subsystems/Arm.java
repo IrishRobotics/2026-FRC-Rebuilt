@@ -4,28 +4,41 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Arm extends SubsystemBase {
   private TalonSRX pivotMotor = new TalonSRX(Constants.Arm.ARM_MOTOR);
+  private PIDController pidController =
+      new PIDController(Constants.Arm.PID_P, Constants.Arm.PID_I, Constants.Arm.PID_D);
+  private DutyCycleEncoder encoder = new DutyCycleEncoder(Constants.Arm.ENCODER_PORT);
 
   /** Creates a new Arm. */
   public Arm() {
     TalonSRXConfiguration config = new TalonSRXConfiguration();
-    config.primaryPID.selectedFeedbackSensor = FeedbackDevice.PulseWidthEncodedPosition;
-    // TODO: Set up encoder
-    config.slot0.kP = Constants.Arm.PID_P;
-    config.slot0.kI = Constants.Arm.PID_I;
-    config.slot0.kD = Constants.Arm.PID_D;
     pivotMotor.configAllSettings(config);
     pivotMotor.setNeutralMode(NeutralMode.Brake);
+  }
+
+  @Override
+  public void periodic() {
+    if (pidController.getSetpoint() != -1) {
+      pivotMotor.set(TalonSRXControlMode.PercentOutput, pidController.calculate(encoder.get()));
+    }
+    if (!DriverStation.isTest()) {
+      SmartDashboard.putNumber("Arm Encoder", encoder.get());
+      SmartDashboard.putNumber("Arm Setpoint", pidController.getSetpoint());
+      SmartDashboard.putNumber("Arm Output", pivotMotor.getMotorOutputPercent());
+    }
   }
 
   public void stop() {
@@ -33,11 +46,12 @@ public class Arm extends SubsystemBase {
   }
 
   public void setArmSpeed(double speed) {
+    pidController.setSetpoint(-1);
     pivotMotor.set(TalonSRXControlMode.PercentOutput, speed);
   }
 
   public void setArmTarget(double target) {
-    pivotMotor.set(TalonSRXControlMode.Position, target);
+    pidController.setSetpoint(target);
   }
 
   public Command setArm(double target) {
