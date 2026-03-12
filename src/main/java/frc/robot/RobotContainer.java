@@ -9,7 +9,6 @@ import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.commands.Debug;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
@@ -45,13 +44,10 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    driverController.start().whileTrue(Debug.triggered("Driver A"));
-    // coopController.start().whileTrue(Debug.triggered("Coop A"));
-
     coopController.rightTrigger().whileTrue(intake.runIntake(Constants.Intake.WHEEL_SPEED));
-    coopController.leftTrigger().whileTrue(shooter.runAtSpeed(8000,0));
-    // coopController.y().whileTrue(arm.runArm(0.5));
-    // coopController.a().whileTrue(arm.runArm(-0.5));
+    coopController.leftTrigger().whileTrue(shooter.runAtSpeed(8000, 0));
+    coopController.y().whileTrue(arm.runArm(0.5));
+    coopController.a().whileTrue(arm.runArm(-0.5));
     coopController.povUp().whileTrue(shooter.runFeeder(Constants.Shooter.FEEDER_POWER));
     coopController.povDown().whileTrue(shooter.runShooter());
   }

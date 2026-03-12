@@ -1,7 +1,5 @@
 package frc.robot;
 
-import edu.wpi.first.units.PerUnit;
-
 /** The Constants class holds all "Magic Numbers" and other constants */
 public final class Constants {
   private Constants() {}

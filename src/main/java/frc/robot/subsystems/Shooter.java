@@ -13,7 +13,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
-
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -25,16 +25,20 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
   private final SparkMax topMotor = new SparkMax(Constants.Shooter.TOP_MOTOR, MotorType.kBrushless);
   private final RelativeEncoder topMotorEncoder = topMotor.getEncoder();
   private final SparkClosedLoopController topMotorController = topMotor.getClosedLoopController();
-  private final SparkMax bottomMotor = new SparkMax(Constants.Shooter.BOTTOM_MOTOR, MotorType.kBrushless);
+  private final SparkMax bottomMotor =
+      new SparkMax(Constants.Shooter.BOTTOM_MOTOR, MotorType.kBrushless);
   private final RelativeEncoder bottomMotorEncoder = bottomMotor.getEncoder();
-  private final SparkClosedLoopController bottomMotorController = bottomMotor.getClosedLoopController();
-  private final SparkMax feederMotor = new SparkMax(Constants.Shooter.FEEDER_MOTOR, MotorType.kBrushless);
+  private final SparkClosedLoopController bottomMotorController =
+      bottomMotor.getClosedLoopController();
+  private final SparkMax feederMotor =
+      new SparkMax(Constants.Shooter.FEEDER_MOTOR, MotorType.kBrushless);
 
   /** Creates a new shooter with the values in Constants */
   public Shooter() {
     SparkMaxConfig defaultConfig = new SparkMaxConfig();
     // TODO: tune PID loop
-    defaultConfig.closedLoop
+    defaultConfig
+        .closedLoop
         .p(Constants.Shooter.PID_P)
         .i(Constants.Shooter.PID_I)
         .d(Constants.Shooter.PID_D)
@@ -56,8 +60,11 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
 
   @Override
   public void periodic() {
-    // SmartDashboard.putNumber("Shooter: Top Motor", topMotorEncoder.getVelocity());
-    // SmartDashboard.putNumber("Shooter: Bottom Motor", bottomMotorEncoder.getVelocity()); 
+    if (DriverStation.isTest()) {
+      return;
+    }
+    SmartDashboard.putNumber("Shooter: Top Motor", topMotorEncoder.getVelocity());
+    SmartDashboard.putNumber("Shooter: Bottom Motor", bottomMotorEncoder.getVelocity());
   }
 
   /** Stops both motors */
@@ -70,7 +77,7 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
   /**
    * Sets the speed of the top and bottom motors separately
    *
-   * @param topSpeed    top setpoint in RPM
+   * @param topSpeed top setpoint in RPM
    * @param bottomSpeed bottom setpoint in RPM
    */
   public void setSpeed(double topSpeed, double bottomSpeed) {
@@ -89,7 +96,7 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
 
   /**
    * Sets the speed of the feeder motor
-   * 
+   *
    * @param speed
    */
   public void setFeederSpeed(double speed) {
@@ -109,7 +116,7 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
   /**
    * Creates a command that runs the shooter at the given speeds
    *
-   * @param topSpeed    The speed for the top motor (RPM)
+   * @param topSpeed The speed for the top motor (RPM)
    * @param bottomSpeed The speed for the bottom motor (RPM)
    * @return A command that runs the shooter at the given speeds
    */
@@ -128,14 +135,16 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
   }
 
   public Command runShooter() {
-    return this.startEnd(() -> {
-      setSpeed(Constants.Shooter.SHOOTER_RPM);
-      Timer.delay(Constants.Shooter.FEEDER_WAIT);
-      setFeederSpeed(Constants.Shooter.FEEDER_POWER);
-    }, () -> {
-      setSpeed(0);
-      setFeederSpeed(0);
-    });
+    return this.startEnd(
+        () -> {
+          setSpeed(Constants.Shooter.SHOOTER_RPM);
+          Timer.delay(Constants.Shooter.FEEDER_WAIT);
+          setFeederSpeed(Constants.Shooter.FEEDER_POWER);
+        },
+        () -> {
+          setSpeed(0);
+          setFeederSpeed(0);
+        });
   }
 
   @Override

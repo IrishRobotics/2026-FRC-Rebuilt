@@ -3,11 +3,8 @@ package subsystems;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import edu.wpi.first.units.Units;
-import edu.wpi.first.units.measure.AngularVelocity;
 import frc.robot.Constants;
 import general.subsystems.ShooterTests;
-
 import org.junit.jupiter.api.Test;
 
 class ShooterTest extends ShooterTests {

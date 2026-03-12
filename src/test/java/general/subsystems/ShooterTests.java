@@ -2,24 +2,14 @@ package general.subsystems;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
-import java.lang.reflect.Field;
-
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-
-import com.revrobotics.sim.SparkMaxSim;
-import com.revrobotics.spark.SparkMax;
-
 import edu.wpi.first.hal.HAL;
-import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.math.system.plant.LinearSystemId;
-import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.simulation.DriverStationSim;
-import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.Shooter;
 import general.motors.Motor;
 import general.motors.SparkMaxNeoMotor;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 
 public abstract class ShooterTests {
   protected Shooter shooter;
@@ -62,7 +52,6 @@ public abstract class ShooterTests {
     double bottomSpeed = bottomMotor.simulateFlywheelRPM(time, 0.07609);
     double feederSpeed = feederMotor.simulateFlywheelRPM(time, 0.07609);
 
-    
-    return new double[] { topSpeed, bottomSpeed, feederSpeed };
+    return new double[] {topSpeed, bottomSpeed, feederSpeed};
   }
 }
