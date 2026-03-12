@@ -56,8 +56,8 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Shooter: Top Motor", topMotorEncoder.getVelocity());
-    SmartDashboard.putNumber("Shooter: Bottom Motor", bottomMotorEncoder.getVelocity()); 
+    // SmartDashboard.putNumber("Shooter: Top Motor", topMotorEncoder.getVelocity());
+    // SmartDashboard.putNumber("Shooter: Bottom Motor", bottomMotorEncoder.getVelocity()); 
   }
 
   /** Stops both motors */
