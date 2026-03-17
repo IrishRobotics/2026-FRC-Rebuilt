@@ -9,12 +9,12 @@ import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRXConfiguration;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Robot;
 
 public class Arm extends SubsystemBase {
   private TalonSRX pivotMotor = new TalonSRX(Constants.Arm.ARM_MOTOR);
@@ -35,7 +35,7 @@ public class Arm extends SubsystemBase {
     if (isPIDEnabled) {
       pivotMotor.set(TalonSRXControlMode.PercentOutput, pidController.calculate(encoder.get()));
     }
-    if (!DriverStation.isTest()) {
+    if (!Robot.isSimulation()) {
       SmartDashboard.putNumber("Arm Encoder", encoder.get());
       SmartDashboard.putNumber("Arm Setpoint", pidController.getSetpoint());
       SmartDashboard.putNumber("Arm Output", pivotMotor.getMotorOutputPercent());
