@@ -107,28 +107,9 @@ public class Drivetrain extends SubsystemBase implements AutoCloseable {
   public Command operatorDrive(CommandXboxController controller, boolean squareInputs) {
     return new RunCommand(
         () -> {
-          double forward = controller.getLeftY();
-          double strafe = controller.getLeftX();
-          double turn = controller.getRightX();
-          if (squareInputs) {
-            forward = Math.copySign(forward * forward, forward);
-            strafe = Math.copySign(strafe * strafe, strafe);
-            turn = Math.copySign(turn * turn, turn);
-          }
-          this.drive(forward, strafe, turn);
+          this.drive(-controller.getRightY(), controller.getRightX(), controller.getLeftX());
         },
         this);
-  }
-
-  /**
-   * Gets all motors for use by tests and sets the deadband to zero.
-   *
-   * @return {fl, fr, bl, br}
-   */
-  public SparkMax[] testMode() {
-    drive.setDeadband(0);
-    SparkMax[] motors = {frontLeftMotor, frontRightMotor, backLeftMotor, backRightMotor};
-    return motors;
   }
 
   /**
