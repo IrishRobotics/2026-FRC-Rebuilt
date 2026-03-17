@@ -21,6 +21,7 @@ public class Arm extends SubsystemBase {
   private PIDController pidController =
       new PIDController(Constants.Arm.PID_P, Constants.Arm.PID_I, Constants.Arm.PID_D);
   private DutyCycleEncoder encoder = new DutyCycleEncoder(Constants.Arm.ENCODER_PORT);
+  private boolean isPIDEnabled = false;
 
   /** Creates a new Arm. */
   public Arm() {
@@ -31,7 +32,7 @@ public class Arm extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if (pidController.getSetpoint() != -1) {
+    if (isPIDEnabled) {
       pivotMotor.set(TalonSRXControlMode.PercentOutput, pidController.calculate(encoder.get()));
     }
     if (!DriverStation.isTest()) {
@@ -46,12 +47,13 @@ public class Arm extends SubsystemBase {
   }
 
   public void setArmSpeed(double speed) {
-    pidController.setSetpoint(-1);
+    isPIDEnabled = false;
     pivotMotor.set(TalonSRXControlMode.PercentOutput, speed);
   }
 
   public void setArmTarget(double target) {
     pidController.setSetpoint(target);
+    isPIDEnabled = true;
   }
 
   public Command setArm(double target) {
