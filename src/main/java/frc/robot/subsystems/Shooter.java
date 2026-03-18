@@ -13,12 +13,12 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Robot;
 
 /** This class controls the robot's shooter */
 public class Shooter extends SubsystemBase implements AutoCloseable {
@@ -60,11 +60,10 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
 
   @Override
   public void periodic() {
-    if (DriverStation.isTest()) {
-      return;
+    if (!Robot.isSimulation()) {
+      SmartDashboard.putNumber("Shooter: Top Motor", topMotorEncoder.getVelocity());
+      SmartDashboard.putNumber("Shooter: Bottom Motor", bottomMotorEncoder.getVelocity());
     }
-    SmartDashboard.putNumber("Shooter: Top Motor", topMotorEncoder.getVelocity());
-    SmartDashboard.putNumber("Shooter: Bottom Motor", bottomMotorEncoder.getVelocity());
   }
 
   /** Stops both motors */
