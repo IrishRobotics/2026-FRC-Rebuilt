@@ -65,13 +65,13 @@ public class Drivetrain extends SubsystemBase implements AutoCloseable {
     invertedConfig.inverted(true);
 
     frontLeftMotor.configure(
-        defaultConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+        defaultConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     frontRightMotor.configure(
-        invertedConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+        invertedConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     backLeftMotor.configure(
-        defaultConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+        defaultConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     backRightMotor.configure(
-        invertedConfig, ResetMode.kResetSafeParameters, PersistMode.kNoPersistParameters);
+        invertedConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
   @Override
@@ -107,7 +107,7 @@ public class Drivetrain extends SubsystemBase implements AutoCloseable {
   public Command operatorDrive(CommandXboxController controller, boolean squareInputs) {
     return new RunCommand(
         () -> {
-          this.drive(-controller.getRightY(), controller.getRightX(), controller.getLeftX());
+          this.drive(-controller.getLeftY(), controller.getLeftX(), controller.getRightX());
         },
         this);
   }
