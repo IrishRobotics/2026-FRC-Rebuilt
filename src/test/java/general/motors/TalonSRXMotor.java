@@ -18,11 +18,10 @@ public class TalonSRXMotor {
     }
 
     public double simulate(DutyCycleEncoderSim encoder, double time, SingleJointedArmSim sim) {
-        motorSim.setBusVoltage(12.0);
-
         final double dt = 0.02;
         final int steps = (int) (time / dt);
         for (int i = 0; i < steps; i++) {
+            motorSim.setBusVoltage(12.0);
             encoder.set(Units.radiansToRotations(sim.getAngleRads()));
             CommandScheduler.getInstance().run();
 
