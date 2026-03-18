@@ -19,7 +19,7 @@ public class Intake extends SubsystemBase {
   public Intake() {
     TalonSRXConfiguration config = new TalonSRXConfiguration();
     intakeMotor.configAllSettings(config);
-    intakeMotor.setInverted(InvertType.InvertMotorOutput);
+    // intakeMotor.setInverted(InvertType.InvertMotorOutput);
   }
 
   public void stop() {

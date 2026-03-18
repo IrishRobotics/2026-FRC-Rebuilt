@@ -45,11 +45,11 @@ public class RobotContainer {
 
   private void configureBindings() {
     coopController.rightTrigger().whileTrue(intake.runIntake(Constants.Intake.WHEEL_SPEED));
-    coopController.leftTrigger().whileTrue(shooter.runAtSpeed(8000, 0));
+    coopController.leftTrigger().whileTrue(shooter.runShooter());
     coopController.y().whileTrue(arm.runArm(0.5));
     coopController.a().whileTrue(arm.runArm(-0.5));
     coopController.povUp().whileTrue(shooter.runFeeder(Constants.Shooter.FEEDER_POWER));
-    coopController.povDown().whileTrue(shooter.runShooter());
+    coopController.povDown().whileTrue(shooter.runAtSpeed(Constants.Shooter.SHOOTER_RPM, Constants.Shooter.SHOOTER_RPM));
   }
 
   /**

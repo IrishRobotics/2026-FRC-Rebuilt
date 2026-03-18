@@ -44,7 +44,7 @@ public final class Constants {
     public static final int WHEEL_MOTOR = 9;
 
     /** The speed limit for intake movement */
-    public static final double WHEEL_SPEED = 0.8;
+    public static final double WHEEL_SPEED = 1;
   }
 
   public static class Shooter {
@@ -52,7 +52,7 @@ public final class Constants {
     public static final int BOTTOM_MOTOR = 5;
     public static final int FEEDER_MOTOR = 7;
 
-    public static final double SHOOTER_RPM = 8000;
+    public static final double SHOOTER_RPM = 7000;
     public static final double FEEDER_POWER = 0.5;
     public static final double FEEDER_WAIT = 0.5;
 
