@@ -56,7 +56,7 @@ class ShooterCommandTest extends ShooterTests {
     CommandScheduler.getInstance().schedule(testCommand);
     CommandScheduler.getInstance().run();
 
-    assertEquals(feederMotor.getSetpoint(), speed);
+    assertEquals(speed, feederMotor.getSetpoint(), Constants.Tests.DELTA);
     final double[] speeds = simulate(10);
     assertTrue(speeds[2] > 0);
 

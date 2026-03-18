@@ -31,6 +31,8 @@ public final class Constants {
   }
 
   public static class Arm {
+    private Arm() {}
+
     public static final int ARM_MOTOR = 8;
 
     public static final double PID_P = 0.01;
@@ -41,6 +43,8 @@ public final class Constants {
   }
 
   public static class Intake {
+    private Intake() {}
+
     public static final int WHEEL_MOTOR = 9;
 
     /** The speed limit for intake movement */
@@ -48,6 +52,8 @@ public final class Constants {
   }
 
   public static class Shooter {
+    private Shooter() {}
+
     public static final int TOP_MOTOR = 6;
     public static final int BOTTOM_MOTOR = 5;
     public static final int FEEDER_MOTOR = 7;

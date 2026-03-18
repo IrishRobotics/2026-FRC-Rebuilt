@@ -1,6 +1,7 @@
 package general.subsystems;
 
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import edu.wpi.first.hal.HAL;
 import edu.wpi.first.wpilibj.simulation.DriverStationSim;
@@ -19,7 +20,8 @@ public abstract class ShooterTests {
 
   @BeforeEach
   void setup() {
-    assert HAL.initialize(500, 0);
+    boolean halInitialized = HAL.initialize(500, 0);
+    assertTrue(halInitialized, "HAL initialization failed");
     DriverStationSim.setEnabled(true);
     DriverStationSim.notifyNewData();
     shooter = new Shooter();

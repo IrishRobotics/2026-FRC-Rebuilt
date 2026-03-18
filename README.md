@@ -8,10 +8,10 @@
 
 - Driver
   - Joystick
-    - Right Y: Drive
-    - Right X: Strafe
-    - Left X: Turn
+    - Left Y: Drive
+    - Left X: Strafe
+    - Right X: Turn
   - A: Test message
 - Coop
   - A: Test message
-  - B: Run shooter
+

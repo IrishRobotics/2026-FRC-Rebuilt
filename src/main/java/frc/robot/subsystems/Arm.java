@@ -33,7 +33,9 @@ public class Arm extends SubsystemBase {
   @Override
   public void periodic() {
     if (isPIDEnabled) {
-      pivotMotor.set(TalonSRXControlMode.PercentOutput, pidController.calculate(encoder.get()));
+      double pidOutput = pidController.calculate(encoder.get());
+      pidOutput = Math.max(-1.0, Math.min(1.0, pidOutput));
+      pivotMotor.set(TalonSRXControlMode.PercentOutput, pidOutput);
     }
     if (!Robot.isSimulation()) {
       SmartDashboard.putNumber("Arm Encoder", encoder.get());
