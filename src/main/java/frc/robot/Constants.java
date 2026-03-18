@@ -37,17 +37,16 @@ public final class Constants {
     /** The low-speed limit for drivetrain movement */
     public static final double LOW_SPEED = 0.5;
 
-    /**
-     * The width between the left and right wheels across the robot (trackwidth), in meters.
-     * TODO: Update this value to match the actual robot's measured trackwidth.
-     */
-    public static final double WHEEL_WIDTH = 1.0;
+    /** The width between the left and right wheels across the robot (trackwidth), in meters. */
+    public static final double WHEEL_WIDTH = 0.406;
 
     /**
      * The distance between the front and back wheel centers along the robot (wheelbase), in meters.
-     * TODO: Update this value to match the actual robot's measured wheelbase.
      */
-    public static final double WHEEL_LENGTH = 1.0;
+    public static final double WHEEL_LENGTH = 0.518;
+
+    public static final double WHEEL_DIAMETER_METERS = 0.203;
+    public static final double GEAR_RATIO = 8.45;
   }
 
   public static class Arm {

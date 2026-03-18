@@ -28,7 +28,7 @@ public class Drivetrain extends SubsystemBase implements AutoCloseable {
   // Distance the robot travels per encoder rotation (meters per rotation).
   // This should be set to (wheel circumference in meters) / gearRatio.
   // Update this value to match your drivetrain hardware.
-  private static final double POSITION_CONVERSION_FACTOR_METERS_PER_ROTATION = 0.319; // example value
+  private static final double POSITION_CONVERSION_FACTOR_METERS_PER_ROTATION = 1; // example value
 
   private SparkMax frontLeftMotor =
       new SparkMax(Constants.Drivetrain.FRONT_LEFT_MOTOR, MotorType.kBrushless);
@@ -67,14 +67,12 @@ public class Drivetrain extends SubsystemBase implements AutoCloseable {
     SparkMaxConfig defaultConfig = new SparkMaxConfig();
     defaultConfig.inverted(false);
     // Configure encoder to report position in meters instead of rotations.
-    defaultConfig.encoder.positionConversionFactor(
-        POSITION_CONVERSION_FACTOR_METERS_PER_ROTATION);
+    defaultConfig.encoder.positionConversionFactor(POSITION_CONVERSION_FACTOR_METERS_PER_ROTATION);
 
     SparkMaxConfig invertedConfig = new SparkMaxConfig();
     invertedConfig.inverted(true);
     // Same position conversion for inverted motors.
-    invertedConfig.encoder.positionConversionFactor(
-        POSITION_CONVERSION_FACTOR_METERS_PER_ROTATION);
+    invertedConfig.encoder.positionConversionFactor(POSITION_CONVERSION_FACTOR_METERS_PER_ROTATION);
 
     frontLeftMotor.configure(
         defaultConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -171,10 +169,7 @@ public class Drivetrain extends SubsystemBase implements AutoCloseable {
   }
 
   // Wheel diameter in meters (example: 6-inch mecanum wheels ≈ 0.1524 m).
-  // Adjust this and the gear ratio to match your robot's actual hardware.
-  private static final double WHEEL_DIAMETER_METERS = 0.1524;
-  // Gear ratio = motor rotations / wheel rotations. Use 1.0 if the encoder is on the wheel shaft.
-  private static final double GEAR_RATIO = 1.0;
+  // Adjust this and the gear ratio to match your robot's actual hardware
 
   /**
    * Converts encoder rotations at the motor to linear distance traveled by the wheel in meters.
@@ -183,9 +178,9 @@ public class Drivetrain extends SubsystemBase implements AutoCloseable {
    * @return Linear distance in meters traveled by the wheel.
    */
   private double rotationsToMeters(double rotations) {
-    double wheelCircumference = Math.PI * WHEEL_DIAMETER_METERS;
+    double wheelCircumference = Math.PI * Constants.Drivetrain.WHEEL_DIAMETER_METERS;
     // Convert motor rotations to wheel rotations, then to linear distance.
-    return (rotations / GEAR_RATIO) * wheelCircumference;
+    return (rotations / Constants.Drivetrain.GEAR_RATIO) * wheelCircumference;
   }
 
   private MecanumDriveWheelPositions getPositions() {
