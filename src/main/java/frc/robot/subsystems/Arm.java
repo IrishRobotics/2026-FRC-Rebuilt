@@ -18,8 +18,8 @@ import frc.robot.Robot;
 
 public class Arm extends SubsystemBase implements AutoCloseable {
   private TalonSRX pivotMotor = new TalonSRX(Constants.Arm.ARM_MOTOR);
-  private PIDController pidController = new PIDController(Constants.Arm.PID_P, Constants.Arm.PID_I,
-      Constants.Arm.PID_D);
+  private PIDController pidController =
+      new PIDController(Constants.Arm.PID_P, Constants.Arm.PID_I, Constants.Arm.PID_D);
   private DutyCycleEncoder encoder = new DutyCycleEncoder(Constants.Arm.ENCODER_PORT);
   private boolean isPIDEnabled = false;
 

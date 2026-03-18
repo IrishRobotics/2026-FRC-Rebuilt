@@ -11,14 +11,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
-public class Intake extends SubsystemBase {
+public class Intake extends SubsystemBase implements AutoCloseable {
   private TalonSRX intakeMotor = new TalonSRX(Constants.Intake.WHEEL_MOTOR);
 
   /** Creates a new Intake. */
   public Intake() {
     TalonSRXConfiguration config = new TalonSRXConfiguration();
     intakeMotor.configAllSettings(config);
-    // intakeMotor.setInverted(InvertType.InvertMotorOutput);
   }
 
   public void stop() {
@@ -26,10 +25,19 @@ public class Intake extends SubsystemBase {
   }
 
   public void setWheelPercent(double percent) {
+    if (percent < -1.0 || percent > 1.0) {
+      throw new IllegalArgumentException("Percent must be between -1.0 and 1.0");
+    }
     intakeMotor.set(TalonSRXControlMode.PercentOutput, percent);
   }
 
   public Command runIntake(double percent) {
+    if (percent < -1.0 || percent > 1.0) {
+      throw new IllegalArgumentException("Percent must be between -1.0 and 1.0");
+    }
     return this.startEnd(() -> setWheelPercent(percent), this::stop);
   }
+
+  @Override
+  public void close() throws Exception { }
 }

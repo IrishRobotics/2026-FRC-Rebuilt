@@ -1,4 +1,4 @@
-package subsystems;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -17,8 +17,8 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 /**
- * Comprehensive tests for the Drivetrain subsystem.
- * Tests cover all movement directions, speed control, and edge cases.
+ * Comprehensive tests for the Drivetrain subsystem. Tests cover all movement directions, speed
+ * control, and edge cases.
  */
 @DisplayName("Drivetrain Tests")
 class DrivetrainTest extends TestBase {
@@ -64,11 +64,9 @@ class DrivetrainTest extends TestBase {
   }
 
   @AfterEach
-  protected void shutdown() {
-    cleanup();
-    if (drivetrain != null) {
-      drivetrain.close();
-    }
+  protected void cleanup() throws Exception {
+    super.cleanup();
+    drivetrain.close();
   }
 
   @Nested
@@ -343,10 +341,11 @@ class DrivetrainTest extends TestBase {
         cmd.initialize();
 
         if (i % 2 == 0) {
-          assertEquals(Constants.Drivetrain.LOW_SPEED, drivetrain.getSpeed(), Constants.Tests.DELTA);
+          assertEquals(
+              Constants.Drivetrain.LOW_SPEED, drivetrain.getSpeed(), Constants.Tests.DELTA);
         } else {
-          assertEquals(Constants.Drivetrain.HIGH_SPEED, drivetrain.getSpeed(),
-              Constants.Tests.DELTA);
+          assertEquals(
+              Constants.Drivetrain.HIGH_SPEED, drivetrain.getSpeed(), Constants.Tests.DELTA);
         }
       }
     }

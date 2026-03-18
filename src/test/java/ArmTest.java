@@ -1,49 +1,79 @@
-package subsystems;
-
 import static org.junit.jupiter.api.Assertions.*;
 
-import general.subsystems.ArmTests;
+import org.junit.jupiter.api.AfterEach;
+
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.simulation.DutyCycleEncoderSim;
+import frc.robot.Constants;
+import frc.robot.subsystems.Arm;
+import general.Reflections;
+import general.TestBase;
+import general.motors.TalonSRXMotor;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 /**
- * Comprehensive tests for the Arm subsystem.
- * Tests cover motor speed control, PID targeting, encoder feedback, and stop functionality.
+ * Comprehensive tests for the Arm subsystem. Tests cover motor speed control, PID targeting,
+ * encoder feedback, and stop functionality.
  */
 @DisplayName("Arm Subsystem Tests")
-public class ArmTest extends ArmTests {
+public class ArmTest extends TestBase {
+  protected Arm arm;
+  protected TalonSRXMotor pivotMotor;
+  protected DutyCycleEncoderSim encoder;
+
+  @BeforeEach
+  @Override
+  protected void setup() {
+    super.setup();
+    arm = new Arm();
+    try {
+      pivotMotor = new TalonSRXMotor(arm, "pivotMotor");
+      encoder =
+          new DutyCycleEncoderSim(
+              Reflections.getPrivateField(arm, "encoder", DutyCycleEncoder.class));
+    } catch (NoSuchFieldException e) {
+      e.printStackTrace();
+      fail("Failed to access motor fields via reflection");
+    }
+  }
+
+  @AfterEach
+  @Override
+  protected void cleanup() throws Exception {
+    super.cleanup();
+    arm.close();
+  }
 
   @Nested
-  @DisplayName("Motor Control Tests")
-  class MotorControlTests {
+  @DisplayName("Motor Speed Control Tests")
+  class MotorSpeedControlTests {
+    @ParameterizedTest
+    @DisplayName("Setting wheel percent in accepted range")
+    @ValueSource(doubles = { -1.0, -0.5, 0.0, 0.001, 0.5, 1.0 })
+    void setWheelPercentValid(double percent) {
+      arm.setArmSpeed(percent);
+      assertEquals(percent, pivotMotor.getOutput(), Constants.Tests.DELTA, "Wheel percent should be set to the value");
+    }
 
-    @Test
-    @DisplayName("Setting arm speed should command motor")
-    void setArmSpeed() {
-      arm.setArmSpeed(0.5);
-      assertTrue(true);
+    @ParameterizedTest
+    @DisplayName("Setting wheel percent in unaccepted range")
+    @ValueSource(doubles = { -1.1, 1.1, -5.0, 5.0 })
+    void setWheelPercentInvalid(double percent) {
+      assertThrows(IllegalArgumentException.class, () -> arm.setArmSpeed(percent),
+          "Expected IllegalArgumentException for invalid arm speed");
     }
 
     @Test
-    @DisplayName("Zero speed stops motor")
-    void zeroSpeed() {
-      arm.setArmSpeed(0.0);
-      assertTrue(true);
-    }
-
-    @Test
-    @DisplayName("Full speed forward accepted")
-    void fullSpeedForward() {
-      arm.setArmSpeed(1.0);
-      assertTrue(true);
-    }
-
-    @Test
-    @DisplayName("Full speed reverse accepted")
-    void fullSpeedReverse() {
-      arm.setArmSpeed(-1.0);
-      assertTrue(true);
+    @DisplayName("Stop should set motor to zero")
+    void stopSetsZero() {
+      arm.setArmSpeed(0.75);
+      arm.stop();
+      assertEquals(0.0, pivotMotor.getOutput(), Constants.Tests.DELTA, "Stop should set motor to zero");
     }
   }
 

@@ -34,13 +34,13 @@ public class SparkMaxNeoMotor {
       wasEnabled = true;
       final double dt = 0.02;
       final int steps = (int) (time / dt);
-      
+
       for (int i = 0; i < steps; i++) {
         // Get the motor output and apply to the simulation
         double voltage = motorSim.getAppliedOutput() * 12.0;
         sim.setInputVoltage(voltage);
         sim.update(dt);
-        
+
         // Feed the simulation velocity back to the motor
         motorSim.iterate(sim.getAngularVelocityRPM(), 12.0, dt);
       }
