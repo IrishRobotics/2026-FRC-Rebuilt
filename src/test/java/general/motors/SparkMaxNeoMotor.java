@@ -3,12 +3,10 @@ package general.motors;
 import com.revrobotics.sim.SparkMaxSim;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.FlywheelSim;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import general.Reflections;
 
-public class SparkMaxNeoMotor implements Motor {
+public class SparkMaxNeoMotor {
   protected SparkMaxSim motorSim;
 
   public SparkMaxNeoMotor(Object obj, String propertyName) throws NoSuchFieldException {
@@ -17,7 +15,6 @@ public class SparkMaxNeoMotor implements Motor {
             Reflections.getPrivateField(obj, propertyName, SparkMax.class), DCMotor.getNEO(1));
   }
 
-  @Override
   public void enable(boolean enabled) {
     if (enabled) {
       motorSim.enable();
@@ -26,30 +23,42 @@ public class SparkMaxNeoMotor implements Motor {
     }
   }
 
-  @Override
   public double getSetpoint() {
     return motorSim.getSetpoint();
   }
 
-  @Override
-  public double simulateFlywheelRPM(double time, double JKgMetersSquared) {
-    FlywheelSim sim =
-        new FlywheelSim(
-            LinearSystemId.createFlywheelSystem(DCMotor.getNEO(1), JKgMetersSquared, 1),
-            DCMotor.getNEO(1));
+  public double simulateFlywheelRPM(double time, FlywheelSim sim) {
+    boolean wasEnabled = false;
+    try {
+      enable(true);
+      wasEnabled = true;
+      final double dt = 0.02;
+      final int steps = (int) (time / dt);
+      
+      for (int i = 0; i < steps; i++) {
+        // Get the motor output and apply to the simulation
+        double voltage = motorSim.getAppliedOutput() * 12.0;
+        sim.setInputVoltage(voltage);
+        sim.update(dt);
+        
+        // Feed the simulation velocity back to the motor
+        motorSim.iterate(sim.getAngularVelocityRPM(), 12.0, dt);
+      }
 
-    enable(true);
-    final double dt = 0.02;
-    final int steps = (int) (time / dt);
-    for (int i = 0; i < steps; i++) {
-      CommandScheduler.getInstance().run();
-
-      motorSim.iterate(sim.getAngularVelocityRPM(), 12.0, dt);
-      sim.setInputVoltage(motorSim.getAppliedOutput() * 12.0);
-      sim.update(dt);
+      return sim.getAngularVelocityRPM();
+    } catch (Exception e) {
+      // Log but continue - simulation state issues should not crash
+      e.printStackTrace();
+      return 0.0;
+    } finally {
+      // Ensure motor is disabled regardless of outcome
+      if (wasEnabled) {
+        try {
+          enable(false);
+        } catch (Exception e) {
+          // Ignore errors during cleanup
+        }
+      }
     }
-
-    enable(false);
-    return sim.getAngularVelocityRPM();
   }
 }

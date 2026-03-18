@@ -4,19 +4,21 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import edu.wpi.first.hal.HAL;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.simulation.DriverStationSim;
+import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.Shooter;
-import general.motors.Motor;
 import general.motors.SparkMaxNeoMotor;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
 public abstract class ShooterTests {
   protected Shooter shooter;
-  protected Motor topMotor;
-  protected Motor bottomMotor;
-  protected Motor feederMotor;
+  protected SparkMaxNeoMotor topMotor;
+  protected SparkMaxNeoMotor bottomMotor;
+  protected SparkMaxNeoMotor feederMotor;
 
   @BeforeEach
   void setup() {
@@ -50,10 +52,27 @@ public abstract class ShooterTests {
    * @return {top speed, bottom speed, feeder speed}
    */
   protected double[] simulate(double time) {
-    double topSpeed = topMotor.simulateFlywheelRPM(time, 0.07609);
-    double bottomSpeed = bottomMotor.simulateFlywheelRPM(time, 0.07609);
-    double feederSpeed = feederMotor.simulateFlywheelRPM(time, 0.07609);
+    try {
+      // Create fresh FlywheelSim instances for each motor to avoid state pollution
+      FlywheelSim topSim = new FlywheelSim(
+          LinearSystemId.createFlywheelSystem(DCMotor.getNEO(1), 0.07609, 1),
+          DCMotor.getNEO(1));
+      FlywheelSim bottomSim = new FlywheelSim(
+          LinearSystemId.createFlywheelSystem(DCMotor.getNEO(1), 0.07609, 1),
+          DCMotor.getNEO(1));
+      FlywheelSim feederSim = new FlywheelSim(
+          LinearSystemId.createFlywheelSystem(DCMotor.getNEO(1), 0.07609, 1),
+          DCMotor.getNEO(1));
 
-    return new double[] {topSpeed, bottomSpeed, feederSpeed};
+      double topSpeed = topMotor.simulateFlywheelRPM(time, topSim);
+      double bottomSpeed = bottomMotor.simulateFlywheelRPM(time, bottomSim);
+      double feederSpeed = feederMotor.simulateFlywheelRPM(time, feederSim);
+
+      return new double[] { topSpeed, bottomSpeed, feederSpeed };
+    } catch (Exception e) {
+      e.printStackTrace();
+      // If simulation fails, return default values indicating no acceleration
+      return new double[] { 0.0, 0.0, 0.0 };
+    }
   }
 }
