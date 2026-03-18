@@ -153,6 +153,9 @@ public class Drivetrain extends SubsystemBase implements AutoCloseable {
     frontRightMotor.close();
     backLeftMotor.close();
     backRightMotor.close();
+    if (imu != null) {
+      imu.close();
+    }
   }
 
   private MecanumDriveWheelPositions getPositions() {
