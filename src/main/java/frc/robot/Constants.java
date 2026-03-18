@@ -4,6 +4,14 @@ package frc.robot;
 public final class Constants {
   private Constants() {}
 
+  /** Constants related to sensors */
+  public static class Sensors {
+    private Sensors() {}
+
+    /** The CAN port of the Pigeon IMU */
+    public static final int PIGEON_ID = 5;
+  }
+
   /** Constants related to controlling the robot */
   public static class Control {
     private Control() {}
@@ -28,6 +36,17 @@ public final class Constants {
 
     /** The low-speed limit for drivetrain movement */
     public static final double LOW_SPEED = 0.5;
+
+    /** The width between the left and right wheels across the robot (trackwidth), in meters. */
+    public static final double WHEEL_WIDTH = 0.406;
+
+    /**
+     * The distance between the front and back wheel centers along the robot (wheelbase), in meters.
+     */
+    public static final double WHEEL_LENGTH = 0.518;
+
+    public static final double WHEEL_DIAMETER_METERS = 0.203;
+    public static final double GEAR_RATIO = 8.45;
   }
 
   public static class Arm {

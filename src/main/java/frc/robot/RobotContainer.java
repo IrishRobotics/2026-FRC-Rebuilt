@@ -38,7 +38,7 @@ public class RobotContainer {
     shooter = new Shooter();
     arm = new Arm();
 
-    drivetrain.setDefaultCommand(drivetrain.operatorDrive(driverController));
+    drivetrain.setDefaultCommand(drivetrain.operatorDrive(driverController, true));
 
     configureBindings();
   }
