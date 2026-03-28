@@ -29,7 +29,7 @@ public class RunFeeder extends Command {
 
     @Override
     public void execute() {
-        if(feeder.getSpeed() < 60 && started) {
+        if(feeder.getSpeed() < 120 && started) {
             feeder.setSpeed(-1);
             timer.schedule(new RunForward(), 1000);
         }

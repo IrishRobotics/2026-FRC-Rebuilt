@@ -44,6 +44,8 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
+    driverController.a().onTrue(drivetrain.toggleSpeed());
+
     coopController.rightTrigger().whileTrue(intake.runIntake(Constants.Intake.WHEEL_SPEED));
     coopController.leftTrigger().whileTrue(new ShootCommand(shooter, feeder));
     coopController.y().whileTrue(arm.runArm(0.5));
@@ -53,6 +55,7 @@ public class RobotContainer {
         .povDown()
         .whileTrue(
             shooter.runAtSpeed(Constants.Shooter.SHOOTER_RPM, Constants.Shooter.SHOOTER_RPM));
+    coopController.povDownLeft().whileTrue(intake.runIntake(-1));
   }
 
   /**
