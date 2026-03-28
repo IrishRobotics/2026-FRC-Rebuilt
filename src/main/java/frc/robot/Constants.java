@@ -54,7 +54,7 @@ public final class Constants {
 
     public static final int ARM_MOTOR = 8;
 
-    public static final double PID_P = 0.01;
+    public static final double PID_P = 1;
     public static final double PID_I = 0;
     public static final double PID_D = 0;
 

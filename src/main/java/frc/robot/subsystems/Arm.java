@@ -37,7 +37,7 @@ public class Arm extends SubsystemBase implements AutoCloseable {
       pidOutput = Math.max(-1.0, Math.min(1.0, pidOutput));
       pivotMotor.set(TalonSRXControlMode.PercentOutput, pidOutput);
     }
-    if (!Robot.isSimulation()) {
+    if (Robot.isReal()) {
       SmartDashboard.putNumber("Arm Encoder", encoder.get());
       SmartDashboard.putNumber("Arm Setpoint", pidController.getSetpoint());
       SmartDashboard.putNumber("Arm Output", pivotMotor.getMotorOutputPercent());
@@ -49,6 +49,9 @@ public class Arm extends SubsystemBase implements AutoCloseable {
   }
 
   public void setArmSpeed(double speed) {
+    if(speed > 1 || speed < -1) {
+      throw new IllegalArgumentException("Speed must be between -1 and 1");
+    }
     isPIDEnabled = false;
     pivotMotor.set(TalonSRXControlMode.PercentOutput, speed);
   }

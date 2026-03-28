@@ -2,8 +2,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.AfterEach;
 
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.simulation.DutyCycleEncoderSim;
+import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import frc.robot.Constants;
 import frc.robot.subsystems.Arm;
 import general.Reflections;
@@ -17,7 +19,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 /**
- * Comprehensive tests for the Arm subsystem. Tests cover motor speed control, PID targeting,
+ * Comprehensive tests for the Arm subsystem. Tests cover motor speed control,
+ * PID targeting,
  * encoder feedback, and stop functionality.
  */
 @DisplayName("Arm Subsystem Tests")
@@ -33,9 +36,8 @@ public class ArmTest extends TestBase {
     arm = new Arm();
     try {
       pivotMotor = new TalonSRXMotor(arm, "pivotMotor");
-      encoder =
-          new DutyCycleEncoderSim(
-              Reflections.getPrivateField(arm, "encoder", DutyCycleEncoder.class));
+      encoder = new DutyCycleEncoderSim(
+          Reflections.getPrivateField(arm, "encoder", DutyCycleEncoder.class));
     } catch (NoSuchFieldException e) {
       e.printStackTrace();
       fail("Failed to access motor fields via reflection");
@@ -57,7 +59,8 @@ public class ArmTest extends TestBase {
     @ValueSource(doubles = { -1.0, -0.5, 0.0, 0.001, 0.5, 1.0 })
     void setWheelPercentValid(double percent) {
       arm.setArmSpeed(percent);
-      assertEquals(percent, pivotMotor.getOutput(), Constants.Tests.DELTA, "Wheel percent should be set to the value");
+      assertEquals(percent, pivotMotor.getOutputPercent(), Constants.Tests.DELTA,
+          "Wheel percent should be set to the value");
     }
 
     @ParameterizedTest
@@ -73,7 +76,7 @@ public class ArmTest extends TestBase {
     void stopSetsZero() {
       arm.setArmSpeed(0.75);
       arm.stop();
-      assertEquals(0.0, pivotMotor.getOutput(), Constants.Tests.DELTA, "Stop should set motor to zero");
+      assertEquals(0.0, pivotMotor.getOutputPercent(), Constants.Tests.DELTA, "Stop should set motor to zero");
     }
   }
 
@@ -84,9 +87,11 @@ public class ArmTest extends TestBase {
     @Test
     @DisplayName("Set target enables PID")
     void setTarget() {
-      encoder.set(0.0);
-      arm.setArmTarget(0.5);
-      assertTrue(true);
+      double target = 0.5;
+      arm.setArmTarget(target);
+      double result = pivotMotor.simulate(encoder, 1.0,
+          new SingleJointedArmSim(DCMotor.getVex775Pro(1), 8, 5, 0.4, 0, 180, true, 0));
+      assertEquals(target, result, Constants.Tests.DELTA, "Arm should move toward target position");
     }
 
     @Test
@@ -121,7 +126,7 @@ public class ArmTest extends TestBase {
     @Test
     @DisplayName("Encoder tracks positions")
     void tracksPositions() {
-      double[] positions = {0.0, 0.25, 0.5, 0.75, 1.0};
+      double[] positions = { 0.0, 0.25, 0.5, 0.75, 1.0 };
       for (double pos : positions) {
         encoder.set(pos);
         assertEquals(pos, encoder.get(), 0.01);
@@ -133,36 +138,6 @@ public class ArmTest extends TestBase {
     void negativeValues() {
       encoder.set(-0.5);
       assertEquals(-0.5, encoder.get(), 0.01);
-    }
-  }
-
-  @Nested
-  @DisplayName("Stop Tests")
-  class StopTests {
-
-    @Test
-    @DisplayName("Stop disables motor")
-    void stopDisablesMotor() {
-      arm.setArmSpeed(0.75);
-      arm.stop();
-      assertTrue(true);
-    }
-
-    @Test
-    @DisplayName("Stop after PID disables motor")
-    void stopAfterPID() {
-      arm.setArmTarget(0.5);
-      arm.stop();
-      assertTrue(true);
-    }
-
-    @Test
-    @DisplayName("Multiple stops safe")
-    void multipleStoops() {
-      arm.stop();
-      arm.stop();
-      arm.stop();
-      assertTrue(true);
     }
   }
 
@@ -187,7 +162,7 @@ public class ArmTest extends TestBase {
     @Test
     @DisplayName("Commands accept various values")
     void commandsVariousValues() {
-      double[] values = {0.0, 0.25, 0.5, 0.75, 1.0};
+      double[] values = { 0.0, 0.25, 0.5, 0.75, 1.0 };
       for (double val : values) {
         var cmd = arm.setArm(val);
         assertNotNull(cmd);
@@ -222,35 +197,6 @@ public class ArmTest extends TestBase {
       arm.setArmTarget(0.4);
       arm.setArmTarget(0.6);
       arm.setArmTarget(0.8);
-      assertTrue(true);
-    }
-  }
-
-  @Nested
-  @DisplayName("Edge Cases")
-  class EdgeCases {
-
-    @Test
-    @DisplayName("Very small speed")
-    void verySmallSpeed() {
-      arm.setArmSpeed(0.01);
-      assertTrue(true);
-    }
-
-    @Test
-    @DisplayName("Speed polarity maintained")
-    void polarityMaintained() {
-      arm.setArmSpeed(0.5);
-      arm.setArmSpeed(-0.5);
-      assertTrue(true);
-    }
-
-    @Test
-    @DisplayName("Settings independent")
-    void settingsIndependent() {
-      arm.setArmTarget(0.5);
-      arm.setArmSpeed(0.25);
-      arm.setArmTarget(0.7);
       assertTrue(true);
     }
   }

@@ -53,7 +53,7 @@ class IntakeTest extends TestBase {
     @ValueSource(doubles = { -1.0, -0.5, 0.0, 0.001, 0.5, 1.0 })
     void setWheelPercentValid(double percent) {
       intake.setWheelPercent(percent);
-      assertEquals(percent, intakeMotor.getOutput(), Constants.Tests.DELTA, "Wheel percent should be set to the value");
+      assertEquals(percent, intakeMotor.getOutputPercent(), Constants.Tests.DELTA, "Wheel percent should be set to the value");
     }
 
     @ParameterizedTest
@@ -69,7 +69,7 @@ class IntakeTest extends TestBase {
     void stopSetsZero() {
       intake.setWheelPercent(0.75);
       intake.stop();
-      assertEquals(0.0, intakeMotor.getOutput(), Constants.Tests.DELTA, "Stop should set motor to zero");
+      assertEquals(0.0, intakeMotor.getOutputPercent(), Constants.Tests.DELTA, "Stop should set motor to zero");
     }
   }
 
@@ -99,7 +99,7 @@ class IntakeTest extends TestBase {
     void runIntakeCommandExecution(double percent) {
       var cmd = intake.runIntake(percent);
       cmd.initialize();
-      assertEquals(percent, intakeMotor.getOutput(), Constants.Tests.DELTA, "runIntake command should set motor percent when executed");
+      assertEquals(percent, intakeMotor.getOutputPercent(), Constants.Tests.DELTA, "runIntake command should set motor percent when executed");
     }
   }
 }
