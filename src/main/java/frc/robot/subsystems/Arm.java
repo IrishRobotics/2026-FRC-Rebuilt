@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Robot;
 
-public class Arm extends SubsystemBase {
+public class Arm extends SubsystemBase implements AutoCloseable {
   private TalonSRX pivotMotor = new TalonSRX(Constants.Arm.ARM_MOTOR);
   private PIDController pidController =
       new PIDController(Constants.Arm.PID_P, Constants.Arm.PID_I, Constants.Arm.PID_D);
@@ -37,7 +37,7 @@ public class Arm extends SubsystemBase {
       pidOutput = Math.max(-1.0, Math.min(1.0, pidOutput));
       pivotMotor.set(TalonSRXControlMode.PercentOutput, pidOutput);
     }
-    if (!Robot.isSimulation()) {
+    if (Robot.isReal()) {
       SmartDashboard.putNumber("Arm Encoder", encoder.get());
       SmartDashboard.putNumber("Arm Setpoint", pidController.getSetpoint());
       SmartDashboard.putNumber("Arm Output", pivotMotor.getMotorOutputPercent());
@@ -49,6 +49,9 @@ public class Arm extends SubsystemBase {
   }
 
   public void setArmSpeed(double speed) {
+    if(speed > 1 || speed < -1) {
+      throw new IllegalArgumentException("Speed must be between -1 and 1");
+    }
     isPIDEnabled = false;
     pivotMotor.set(TalonSRXControlMode.PercentOutput, speed);
   }
@@ -64,5 +67,9 @@ public class Arm extends SubsystemBase {
 
   public Command runArm(double speed) {
     return this.startEnd(() -> setArmSpeed(speed), this::stop);
+  }
+
+  public void close() {
+    encoder.close();
   }
 }
