@@ -75,18 +75,20 @@ public final class Constants {
 
     public static final int TOP_MOTOR = 6;
     public static final int BOTTOM_MOTOR = 5;
-    public static final int FEEDER_MOTOR = 7;
 
     public static final double SHOOTER_RPM = 7000;
-    public static final double FEEDER_POWER = 0.5;
-    public static final double FEEDER_WAIT = 0.5;
 
     public static final double PID_P = 0.00005;
     public static final double PID_I = 0.0000005;
     public static final double PID_D = 0.000005;
-    // public static final double PID_P = 0.001;
-    // public static final double PID_I = 0.00000005;
-    // public static final double PID_D = 0.000000005;
+  }
+
+  public static class Feeder {
+    private Feeder () {}
+
+    public static final int FEEDER_MOTOR = 7;
+    public static final double FEEDER_POWER = 0.5;
+    public static final double FEEDER_WAIT = 0.5;
   }
 
   /** This class holds constants used in tests */

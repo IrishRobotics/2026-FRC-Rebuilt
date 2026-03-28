@@ -50,27 +50,12 @@ class ShooterCommandTest extends ShooterTests {
   }
 
   @Test
-  void setFeederSetpoint() {
-    final double speed = 0.5;
-    Command testCommand = shooter.runFeeder(speed);
-    CommandScheduler.getInstance().schedule(testCommand);
-    CommandScheduler.getInstance().run();
-
-    assertEquals(speed, feederMotor.getSetpoint(), Constants.Tests.DELTA);
-    final double[] speeds = simulate(10);
-    assertTrue(speeds[2] > 0);
-
-    CommandScheduler.getInstance().cancelAll();
-    assertEquals(0, feederMotor.getSetpoint(), Constants.Tests.DELTA);
-  }
-
-  @Test
   void runShooter() {
     Command testCommand = shooter.runShooter();
     CommandScheduler.getInstance().schedule(testCommand);
     CommandScheduler.getInstance().run();
 
-    assertEquals(Constants.Shooter.FEEDER_POWER, feederMotor.getSetpoint(), Constants.Tests.DELTA);
+    assertEquals(Constants.Feeder.FEEDER_POWER, feederMotor.getSetpoint(), Constants.Tests.DELTA);
     final double[] speeds = simulate(40);
     assertEquals(Constants.Shooter.SHOOTER_RPM, topMotor.getSetpoint(), Constants.Tests.DELTA);
     assertEquals(Constants.Shooter.SHOOTER_RPM, bottomMotor.getSetpoint(), Constants.Tests.DELTA);
