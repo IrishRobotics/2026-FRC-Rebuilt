@@ -13,7 +13,6 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -30,13 +29,10 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
   private final RelativeEncoder bottomMotorEncoder = bottomMotor.getEncoder();
   private final SparkClosedLoopController bottomMotorController =
       bottomMotor.getClosedLoopController();
-  private final SparkMax feederMotor =
-      new SparkMax(Constants.Shooter.FEEDER_MOTOR, MotorType.kBrushless);
 
   /** Creates a new shooter with the values in Constants */
   public Shooter() {
     SparkMaxConfig defaultConfig = new SparkMaxConfig();
-    // TODO: tune PID loop
     defaultConfig
         .closedLoop
         .p(Constants.Shooter.PID_P)
@@ -54,8 +50,6 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
         defaultConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     bottomMotor.configure(
         invertedConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    feederMotor.configure(
-        invertedConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
   @Override
@@ -70,7 +64,6 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
   public void stop() {
     topMotor.stopMotor();
     bottomMotor.stopMotor();
-    feederMotor.stopMotor();
   }
 
   /**
@@ -94,15 +87,6 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
   }
 
   /**
-   * Sets the speed of the feeder motor
-   *
-   * @param speed
-   */
-  public void setFeederSpeed(double speed) {
-    feederMotor.set(speed);
-  }
-
-  /**
    * Creates a command that runs the shooter at the given speeds
    *
    * @param speed The speed for both motors (RPM)
@@ -120,36 +104,18 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
    * @return A command that runs the shooter at the given speeds
    */
   public Command runAtSpeed(double topSpeed, double bottomSpeed) {
-    return this.startEnd(() -> setSpeed(topSpeed, bottomSpeed), () -> stop());
-  }
-
-  public Command runFeeder(double speed) {
-    return this.startEnd(
-        () -> {
-          feederMotor.set(speed);
-        },
-        () -> {
-          feederMotor.stopMotor();
-        });
+    return this.startEnd(() -> setSpeed(topSpeed, bottomSpeed), this::stop);
   }
 
   public Command runShooter() {
     return this.startEnd(
-        () -> {
-          setSpeed(Constants.Shooter.SHOOTER_RPM);
-          Timer.delay(Constants.Shooter.FEEDER_WAIT);
-          setFeederSpeed(Constants.Shooter.FEEDER_POWER);
-        },
-        () -> {
-          setSpeed(0);
-          setFeederSpeed(0);
-        });
+        () -> setSpeed(Constants.Shooter.SHOOTER_RPM),
+        this::stop);
   }
 
   @Override
   public void close() {
     topMotor.close();
     bottomMotor.close();
-    feederMotor.close();
   }
 }

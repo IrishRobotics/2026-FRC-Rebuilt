@@ -38,7 +38,7 @@ public class Drivetrain extends SubsystemBase implements AutoCloseable {
       new SparkMax(Constants.Drivetrain.BACK_LEFT_MOTOR, MotorType.kBrushless);
   private SparkMax backRightMotor =
       new SparkMax(Constants.Drivetrain.BACK_RIGHT_MOTOR, MotorType.kBrushless);
-  private double speed = Constants.Drivetrain.LOW_SPEED;
+  private double speed = Constants.Drivetrain.HIGH_SPEED;
   private Pigeon2 imu = new Pigeon2(Constants.Sensors.PIGEON_ID);
   private Translation2d frontLeftTranslate =
       new Translation2d(
@@ -152,7 +152,8 @@ public class Drivetrain extends SubsystemBase implements AutoCloseable {
   public Command toggleSpeed() {
     return new InstantCommand(
         () -> {
-          if (speed == Constants.Drivetrain.HIGH_SPEED) setSpeed(Constants.Drivetrain.LOW_SPEED);
+          System.out.print(speed);
+          if (Math.abs(speed - Constants.Drivetrain.HIGH_SPEED) < 0.01) setSpeed(Constants.Drivetrain.LOW_SPEED);
           else setSpeed(Constants.Drivetrain.HIGH_SPEED);
         });
   }
