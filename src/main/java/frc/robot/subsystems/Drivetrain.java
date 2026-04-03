@@ -9,6 +9,7 @@ import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -68,6 +69,7 @@ public class Drivetrain extends SubsystemBase implements AutoCloseable {
     defaultConfig.inverted(false);
     // Configure encoder to report position in meters instead of rotations.
     defaultConfig.encoder.positionConversionFactor(POSITION_CONVERSION_FACTOR_METERS_PER_ROTATION);
+    defaultConfig.idleMode(SparkBaseConfig.IdleMode.kBrake);
 
     SparkMaxConfig invertedConfig = new SparkMaxConfig();
     invertedConfig.inverted(true);

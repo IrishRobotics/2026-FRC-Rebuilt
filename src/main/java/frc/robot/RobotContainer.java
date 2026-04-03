@@ -8,11 +8,13 @@ import java.lang.annotation.Retention;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DumbAuto;
+import frc.robot.commands.LessDumbAuto;
 import frc.robot.commands.ShootCommand;
 import frc.robot.subsystems.*;
 
@@ -27,6 +29,8 @@ public class RobotContainer {
   private final Feeder feeder;
   private final Arm arm;
   private final Intake intake;
+
+  private SendableChooser<Command> auto;
 
   /** A controller for the robot */
   public RobotContainer() {
@@ -43,6 +47,9 @@ public class RobotContainer {
     arm = new Arm();
 
     drivetrain.setDefaultCommand(drivetrain.operatorDrive(driverController, true));
+
+    auto.setDefaultOption("Nothing", new PrintCommand("NO AUTO"));
+    auto.addOption("Move n shoot", new LessDumbAuto(drivetrain, shooter, feeder));
 
     configureBindings();
   }
@@ -74,7 +81,6 @@ public class RobotContainer {
    * @return autonomous command
    */
   public Command getAutonomousCommand() {
-    // return new DumbAuto(drivetrain);
-    return new PrintCommand("NO AUTO");
+    return auto.getSelected();
   }
 }
