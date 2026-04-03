@@ -2,11 +2,13 @@ package frc.robot;
 
 /** The Constants class holds all "Magic Numbers" and other constants */
 public final class Constants {
-  private Constants() {}
+  private Constants() {
+  }
 
   /** Constants related to sensors */
   public static class Sensors {
-    private Sensors() {}
+    private Sensors() {
+    }
 
     /** The CAN port of the Pigeon IMU */
     public static final int PIGEON_ID = 5;
@@ -14,7 +16,8 @@ public final class Constants {
 
   /** Constants related to controlling the robot */
   public static class Control {
-    private Control() {}
+    private Control() {
+    }
 
     public static final int DRIVER_CONTROLLER_PORT = 0;
     public static final int COOP_CONTROLLER_PORT = 1;
@@ -22,7 +25,8 @@ public final class Constants {
 
   /** Constants related to the drive system */
   public static class Drivetrain {
-    private Drivetrain() {}
+    private Drivetrain() {
+    }
 
     public static final int FRONT_LEFT_MOTOR = 1;
     public static final int FRONT_RIGHT_MOTOR = 2;
@@ -37,11 +41,15 @@ public final class Constants {
     /** The low-speed limit for drivetrain movement */
     public static final double LOW_SPEED = 0.25;
 
-    /** The width between the left and right wheels across the robot (trackwidth), in meters. */
+    /**
+     * The width between the left and right wheels across the robot (trackwidth), in
+     * meters.
+     */
     public static final double WHEEL_WIDTH = 0.406;
 
     /**
-     * The distance between the front and back wheel centers along the robot (wheelbase), in meters.
+     * The distance between the front and back wheel centers along the robot
+     * (wheelbase), in meters.
      */
     public static final double WHEEL_LENGTH = 0.518;
 
@@ -50,7 +58,8 @@ public final class Constants {
   }
 
   public static class Arm {
-    private Arm() {}
+    private Arm() {
+    }
 
     public static final int ARM_MOTOR = 8;
 
@@ -62,7 +71,8 @@ public final class Constants {
   }
 
   public static class Intake {
-    private Intake() {}
+    private Intake() {
+    }
 
     public static final int WHEEL_MOTOR = 9;
 
@@ -71,19 +81,21 @@ public final class Constants {
   }
 
   public static class Shooter {
-    private Shooter() {}
+    private Shooter() {
+    }
 
     public static final int TOP_MOTOR = 6;
     public static final int BOTTOM_MOTOR = 5;
 
-    public static final double SHOOTER_RPM = 1500;
-    public static final double PID_P = 0.00005;
-    public static final double PID_I = 0.0000005;
-    public static final double PID_D = 0.000005;
+    public static final double SHOOTER_RPM = 2000;
+    public static final double PID_P = 0.005;
+    public static final double PID_I = 0.000000005;
+    public static final double PID_D = 0.000000000000000000005;
   }
 
   public static class Feeder {
-    private Feeder() {}
+    private Feeder() {
+    }
 
     public static final int FEEDER_MOTOR = 7;
     public static final double FEEDER_POWER = 0.75;
@@ -92,7 +104,8 @@ public final class Constants {
 
   /** This class holds constants used in tests */
   public static class Tests {
-    private Tests() {}
+    private Tests() {
+    }
 
     /** Maximum allowed deviation for tests using doubles */
     public static final double DELTA = 1e-2;

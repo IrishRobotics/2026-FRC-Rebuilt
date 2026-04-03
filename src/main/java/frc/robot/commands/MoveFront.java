@@ -1,5 +1,6 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Drivetrain;
 
@@ -10,8 +11,8 @@ public class MoveFront extends Command {
     public MoveFront(Drivetrain drivetrain, double distance) {
         this.drivetrain = drivetrain;
         this.distance = distance;
+        addRequirements(drivetrain);
     }
-
 
     @Override
     public void end(boolean interrupted) {
@@ -19,15 +20,17 @@ public class MoveFront extends Command {
     }
 
     @Override
-    public void execute() { }
+    public void execute() {
+        drivetrain.drive(0.4, 0, 0);
+    }
 
     @Override
     public void initialize() {
-        drivetrain.drive(0.5, 0, 0);
+        drivetrain.drive(0, 0, 0);
     }
 
     @Override
     public boolean isFinished() {
-        return Math.sqrt(Math.pow(drivetrain.getPose().getX(), 2) + Math.pow(drivetrain.getPose().getY(), 2)) > distance;
+        return Math.sqrt(Math.pow(drivetrain.getPose().getX(), 2) + Math.pow(drivetrain.getPose().getY(), 2)) >= distance;
     }
 }

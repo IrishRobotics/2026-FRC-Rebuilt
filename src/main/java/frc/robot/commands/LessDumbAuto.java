@@ -8,6 +8,6 @@ import frc.robot.subsystems.Shooter;
 
 public class LessDumbAuto extends SequentialCommandGroup {
     public LessDumbAuto(Drivetrain drivetrain, Shooter shooter, Feeder feeder) {
-        addCommands(new MoveFront(drivetrain, 2.5), new ShootCommand(shooter, feeder));
+        addCommands(new MoveFront(drivetrain, 2), new ShootCommand(shooter, feeder).withDeadline(new WaitCommand(8)));
     }
 }

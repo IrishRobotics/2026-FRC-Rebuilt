@@ -17,6 +17,7 @@ import edu.wpi.first.math.kinematics.MecanumDriveKinematics;
 import edu.wpi.first.math.kinematics.MecanumDriveOdometry;
 import edu.wpi.first.math.kinematics.MecanumDriveWheelPositions;
 import edu.wpi.first.wpilibj.drive.MecanumDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -40,7 +41,7 @@ public class Drivetrain extends SubsystemBase implements AutoCloseable {
   private SparkMax backRightMotor =
       new SparkMax(Constants.Drivetrain.BACK_RIGHT_MOTOR, MotorType.kBrushless);
   private double speed = Constants.Drivetrain.HIGH_SPEED;
-  private Pigeon2 imu = new Pigeon2(Constants.Sensors.PIGEON_ID);
+  private Pigeon2 imu = new Pigeon2(Constants.Drivetrain.IMU_ID);
   private Translation2d frontLeftTranslate =
       new Translation2d(
           Constants.Drivetrain.WHEEL_LENGTH / 2, Constants.Drivetrain.WHEEL_WIDTH / 2);
@@ -89,6 +90,8 @@ public class Drivetrain extends SubsystemBase implements AutoCloseable {
   @Override
   public void periodic() {
     robotPose = odometry.update(imu.getRotation2d(), getPositions());
+    SmartDashboard.putNumber("PoseX", getPose().getX());
+    SmartDashboard.putNumber("PoseY", getPose().getY());
   }
 
   /**

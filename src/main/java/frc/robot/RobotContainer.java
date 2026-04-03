@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DumbAuto;
 import frc.robot.commands.LessDumbAuto;
+import frc.robot.commands.MoveFront;
 import frc.robot.commands.ShootCommand;
 import frc.robot.subsystems.*;
 
@@ -30,7 +31,7 @@ public class RobotContainer {
   private final Arm arm;
   private final Intake intake;
 
-  private SendableChooser<Command> auto;
+  private SendableChooser<Command> auto = new SendableChooser<>();
 
   /** A controller for the robot */
   public RobotContainer() {
@@ -81,6 +82,7 @@ public class RobotContainer {
    * @return autonomous command
    */
   public Command getAutonomousCommand() {
-    return auto.getSelected();
+    return new LessDumbAuto(drivetrain, shooter, feeder);
+    // return auto.getSelected();
   }
 }
