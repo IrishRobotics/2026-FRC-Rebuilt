@@ -15,6 +15,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Robot;
@@ -29,6 +30,7 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
   private final RelativeEncoder bottomMotorEncoder = bottomMotor.getEncoder();
   private final SparkClosedLoopController bottomMotorController =
       bottomMotor.getClosedLoopController();
+  private double shootSpeed = Constants.Shooter.SHOOTER_RPM;
 
   /** Creates a new shooter with the values in Constants */
   public Shooter() {
@@ -107,8 +109,30 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
     return this.startEnd(() -> setSpeed(topSpeed, bottomSpeed), this::stop);
   }
 
+  private class RunShooterCommand extends Command {
+    @Override
+    public void initialize() {
+      runAtSpeed(shootSpeed);
+    }
+
+    @Override
+    public void execute() {
+      runAtSpeed(shootSpeed);
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+      stop();
+    }
+  }
+
   public Command runShooter() {
-    return this.startEnd(() -> setSpeed(Constants.Shooter.SHOOTER_RPM), this::stop);
+    return new RunShooterCommand();
+//    return this.startEnd(() -> setSpeed(Constants.Shooter.SHOOTER_RPM), this::stop);
+  }
+
+  public Command shootScale(double factor) {
+    return Commands.startEnd(() -> shootSpeed = Constants.Shooter.SHOOTER_RPM * (1+factor), () -> shootSpeed = Constants.Shooter.SHOOTER_RPM);
   }
 
   @Override

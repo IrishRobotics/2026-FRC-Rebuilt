@@ -79,6 +79,9 @@ public class RobotContainer {
         .whileTrue(
             shooter.runAtSpeed(Constants.Shooter.SHOOTER_RPM, Constants.Shooter.SHOOTER_RPM));
     coopController.povLeft().whileTrue(intake.runIntake(-1));
+    coopController.leftBumper().whileTrue(shooter.shootScale(0.1));
+    coopController.leftBumper().whileTrue(shooter.shootScale(-0.1));
+
   }
 
   /**
