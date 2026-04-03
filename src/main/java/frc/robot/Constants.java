@@ -87,10 +87,10 @@ public final class Constants {
     public static final int TOP_MOTOR = 6;
     public static final int BOTTOM_MOTOR = 5;
 
-    public static final double SHOOTER_RPM = 2000;
-    public static final double PID_P = 0.005;
-    public static final double PID_I = 0.000000005;
-    public static final double PID_D = 0.000000000000000000005;
+    public static final double SHOOTER_RPM = 1550;
+    public static final double PID_P = 0.0003499999965541065;
+    public static final double PID_I = 0.000001;
+    public static final double PID_D = 1e-11;
   }
 
   public static class Feeder {
@@ -98,7 +98,7 @@ public final class Constants {
     }
 
     public static final int FEEDER_MOTOR = 7;
-    public static final double FEEDER_POWER = 0.75;
+    public static final double FEEDER_POWER = 0.65;
     public static final double FEEDER_WAIT = 1.1;
   }
 

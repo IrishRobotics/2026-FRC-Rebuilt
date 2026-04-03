@@ -9,9 +9,11 @@ import java.lang.annotation.Retention;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DumbAuto;
 import frc.robot.commands.LessDumbAuto;
@@ -51,6 +53,9 @@ public class RobotContainer {
 
     auto.setDefaultOption("Nothing", new PrintCommand("NO AUTO"));
     auto.addOption("Move n shoot", new LessDumbAuto(drivetrain, shooter, feeder));
+    auto.addOption("Just shoot", new ShootCommand(shooter, feeder).withDeadline(new WaitCommand(8)));
+
+    SmartDashboard.putData(auto);//9.999999696126e-8
 
     configureBindings();
   }
@@ -82,7 +87,7 @@ public class RobotContainer {
    * @return autonomous command
    */
   public Command getAutonomousCommand() {
-    return new LessDumbAuto(drivetrain, shooter, feeder);
-    // return auto.getSelected();
+    // return new LessDumbAuto(drivetrain, shooter, feeder);
+    return auto.getSelected();
   }
 }
