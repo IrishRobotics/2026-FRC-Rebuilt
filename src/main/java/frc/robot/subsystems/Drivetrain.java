@@ -153,7 +153,8 @@ public class Drivetrain extends SubsystemBase implements AutoCloseable {
     return new InstantCommand(
         () -> {
           System.out.print(speed);
-          if (Math.abs(speed - Constants.Drivetrain.HIGH_SPEED) < 0.01) setSpeed(Constants.Drivetrain.LOW_SPEED);
+          if (Math.abs(speed - Constants.Drivetrain.HIGH_SPEED) < 0.01)
+            setSpeed(Constants.Drivetrain.LOW_SPEED);
           else setSpeed(Constants.Drivetrain.HIGH_SPEED);
         });
   }

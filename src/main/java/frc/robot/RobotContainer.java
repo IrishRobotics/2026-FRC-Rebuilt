@@ -4,11 +4,15 @@
 
 package frc.robot;
 
+import java.lang.annotation.Retention;
+
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.DumbAuto;
 import frc.robot.commands.ShootCommand;
 import frc.robot.subsystems.*;
 
@@ -44,18 +48,24 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    driverController.a().onTrue(drivetrain.toggleSpeed());
+    // driverController.a().onTrue(drivetrain.toggleSpeed());
+    driverController
+        .a()
+        .onTrue(Commands.runOnce(() -> drivetrain.setSpeed(Constants.Drivetrain.HIGH_SPEED)));
+    driverController
+        .b()
+        .onTrue(Commands.runOnce(() -> drivetrain.setSpeed(Constants.Drivetrain.LOW_SPEED)));
 
     coopController.rightTrigger().whileTrue(intake.runIntake(Constants.Intake.WHEEL_SPEED));
     coopController.leftTrigger().whileTrue(new ShootCommand(shooter, feeder));
     coopController.y().whileTrue(arm.runArm(0.5));
     coopController.a().whileTrue(arm.runArm(-0.5));
-    coopController.povUp().whileTrue(feeder.run(Constants.Feeder.FEEDER_POWER));
+    coopController.povUp().whileTrue(feeder.run(-Constants.Feeder.FEEDER_POWER));
     coopController
         .povDown()
         .whileTrue(
             shooter.runAtSpeed(Constants.Shooter.SHOOTER_RPM, Constants.Shooter.SHOOTER_RPM));
-    coopController.povDownLeft().whileTrue(intake.runIntake(-1));
+    coopController.povLeft().whileTrue(intake.runIntake(-1));
   }
 
   /**
@@ -64,6 +74,7 @@ public class RobotContainer {
    * @return autonomous command
    */
   public Command getAutonomousCommand() {
-    return Commands.print("No autonomous command configured");
+    // return new DumbAuto(drivetrain);
+    return new PrintCommand("NO AUTO");
   }
 }
