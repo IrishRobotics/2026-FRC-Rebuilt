@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import edu.wpi.first.hal.HAL;
 import edu.wpi.first.wpilibj.simulation.DriverStationSim;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Shooter;
 import general.motors.Motor;
 import general.motors.SparkMaxNeoMotor;
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
 
 public abstract class ShooterTests {
   protected Shooter shooter;
+  protected Feeder feeder;
   protected Motor topMotor;
   protected Motor bottomMotor;
   protected Motor feederMotor;
@@ -25,6 +27,7 @@ public abstract class ShooterTests {
     DriverStationSim.setEnabled(true);
     DriverStationSim.notifyNewData();
     shooter = new Shooter();
+    feeder = new Feeder();
 
     try {
       topMotor = new SparkMaxNeoMotor(shooter, "topMotor");

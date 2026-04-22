@@ -108,9 +108,7 @@ public class Shooter extends SubsystemBase implements AutoCloseable {
   }
 
   public Command runShooter() {
-    return this.startEnd(
-        () -> setSpeed(Constants.Shooter.SHOOTER_RPM),
-        this::stop);
+    return this.startEnd(() -> setSpeed(Constants.Shooter.SHOOTER_RPM), this::stop);
   }
 
   @Override
