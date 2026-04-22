@@ -34,7 +34,7 @@ class ShooterTest extends ShooterTests {
   @Test
   void setFeederSetpoint() {
     final double speed = 0.5;
-    shooter.setFeederSpeed(speed);
+    feeder.setSpeed(speed);
     assertEquals(speed, feederMotor.getSetpoint(), Constants.Tests.DELTA);
   }
 }

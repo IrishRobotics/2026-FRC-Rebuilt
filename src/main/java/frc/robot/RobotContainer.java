@@ -18,7 +18,8 @@ public class RobotContainer {
   private final CommandXboxController coopController;
   private final UsbCamera shootCamera;
 
-  private final Drivetrain drivetrain;
+  // to switch back to mecanum, change to Drivetrain
+  private final DrivetrainTank drivetrain;
   private final Shooter shooter;
   private final Feeder feeder;
   private final Arm arm;
@@ -32,7 +33,7 @@ public class RobotContainer {
     shootCamera = CameraServer.startAutomaticCapture();
     shootCamera.setResolution(480, 360);
 
-    drivetrain = new Drivetrain();
+    drivetrain = new DrivetrainTank(); // to switch back to mecanum, change to Drivetrain()
     intake = new Intake();
     shooter = new Shooter();
     feeder = new Feeder();
@@ -44,7 +45,7 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    driverController.a().onTrue(drivetrain.toggleSpeed());
+    // driverController.a().onTrue(drivetrain.toggleSpeed());
 
     coopController.rightTrigger().whileTrue(intake.runIntake(Constants.Intake.WHEEL_SPEED));
     coopController.leftTrigger().whileTrue(new ShootCommand(shooter, feeder));

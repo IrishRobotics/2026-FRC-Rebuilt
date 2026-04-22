@@ -40,6 +40,9 @@ public final class Constants {
     /** The width between the left and right wheels across the robot (trackwidth), in meters. */
     public static final double WHEEL_WIDTH = 0.406;
 
+    // Width here is in meters
+    public static final double ROBOT_WIDTH = 0.5588;
+
     /**
      * The distance between the front and back wheel centers along the robot (wheelbase), in meters.
      */
@@ -83,7 +86,7 @@ public final class Constants {
   }
 
   public static class Feeder {
-    private Feeder () {}
+    private Feeder() {}
 
     public static final int FEEDER_MOTOR = 7;
     public static final double FEEDER_POWER = 0.75;

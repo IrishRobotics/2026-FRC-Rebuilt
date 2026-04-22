@@ -13,47 +13,44 @@ import frc.robot.Constants;
 import frc.robot.commands.RunFeeder;
 
 public class Feeder extends SubsystemBase implements AutoCloseable {
-    private final SparkMax motor =
-            new SparkMax(Constants.Feeder.FEEDER_MOTOR, SparkLowLevel.MotorType.kBrushless);
-    private final RelativeEncoder motorEncoder =
-            motor.getEncoder();
+  private final SparkMax motor =
+      new SparkMax(Constants.Feeder.FEEDER_MOTOR, SparkLowLevel.MotorType.kBrushless);
+  private final RelativeEncoder motorEncoder = motor.getEncoder();
 
-    public Feeder() {
-        SparkMaxConfig config = new SparkMaxConfig();
-        config.inverted(true);
-        config.encoder.velocityConversionFactor(1);
-        config.idleMode(SparkBaseConfig.IdleMode.kBrake);
+  public Feeder() {
+    SparkMaxConfig config = new SparkMaxConfig();
+    config.inverted(true);
+    config.encoder.velocityConversionFactor(1);
+    config.idleMode(SparkBaseConfig.IdleMode.kBrake);
 
-        motor.configure(
-                config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-    }
+    motor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+  }
 
-    /** Stops the motor */
-    public void stop() {
-        motor.stopMotor();
-    }
-    /**
-     * Sets the speed of the feeder motor
-     *
-     * @param speed the precent power of the motor
-     */
-    public void setSpeed(double speed) {
-        motor.set(speed);
-    }
+  /** Stops the motor */
+  public void stop() {
+    motor.stopMotor();
+  }
 
-    /**
-     * Gets the speed in RPM of the motor
-     */
-    public double getSpeed() {
-        return motorEncoder.getVelocity();
-    }
+  /**
+   * Sets the speed of the feeder motor
+   *
+   * @param speed the precent power of the motor
+   */
+  public void setSpeed(double speed) {
+    motor.set(speed);
+  }
 
-    public Command run(double speed) {
-        return new RunFeeder(this, speed);
-    }
+  /** Gets the speed in RPM of the motor */
+  public double getSpeed() {
+    return motorEncoder.getVelocity();
+  }
 
-    @Override
-    public void close() {
-        motor.close();
-    }
+  public Command run(double speed) {
+    return new RunFeeder(this, speed);
+  }
+
+  @Override
+  public void close() {
+    motor.close();
+  }
 }
